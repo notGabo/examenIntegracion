@@ -1,2 +1,38 @@
 /api/.env
 /api/Wallet_MusicPro/
+/cliente
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/musicproClient/node_modules
+/musicproClient/.pnp
+/musicproClient/.pnp.js
+
+# testing
+/musicproClient/coverage
+
+# next.js
+/musicproClient/.next/
+/musicproClient/out/
+
+# production
+/musicproClient/build
+
+# misc
+/musicproClient/musicproClient.DS_Store
+/musicproClient/*.pem
+
+# debug
+/musicproClient/npm-debug.log*
+/musicproClient/yarn-debug.log*
+/musicproClient/yarn-error.log*
+
+# local env files
+/musicproClient/.env*.local
+
+# vercel
+/musicproClient/.vercel
+
+# typescript
+/musicproClient/*.tsbuildinfo
+/musicproClient/next-env.d.ts

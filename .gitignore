@@ -3,6 +3,9 @@
 /cliente
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+#pycache
+/api/__pycache__/
+
 # dependencies
 /musicproClient/node_modules
 /musicproClient/.pnp

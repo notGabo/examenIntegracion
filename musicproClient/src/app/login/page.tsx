@@ -2,8 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 export default function Login() {
   return (
-    <section >
-      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+      <div className="min-h-screen flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
           <Image src="/img/logo.png" className="mb-2" alt="logo" width={100} height={100} />
 
         <div className="w-full rounded-lg shadow border md:mt-0 sm:max-w-md xl:p-0 bg-neutral-900">
@@ -31,7 +30,7 @@ export default function Login() {
           </div>
         </div>
       </div>
-    </section>
+    
   );
 };
 

@@ -6,11 +6,10 @@ import jwt from "jsonwebtoken";
 const fastApiPerfil = "http://129.151.120.46:3300/perfil/";
 
 export async function GET(request: NextRequest, response: NextResponse) {
-
   const cookie = request.cookies.get("myToken");
   if (cookie) {
-    const decoded = jwt.verify(cookie.value, "secret");
-    const decodedJson = JSON.stringify(decoded);
+    const decoded = jwt.verify(cookie.value, "secret").toString();
+    const decodedJson = JSON.parse(decoded) as { exp: number, email: string, username: string, id_rol: string };
     const exp = decodedJson.exp;
     const email = decodedJson.email;
     const username = decodedJson.username;

@@ -2,8 +2,8 @@ import { NextResponse, NextRequest } from 'next/server'
 import jwt from 'jsonwebtoken'
 import { serialize } from 'cookie'
 
-const fastApiLogin = 'http://0.0.0.0:12545/login/'
-
+//const fastApiLogin = 'http://0.0.0.0:12545/login/'
+const fastApiLogin = 'http://129.151.120.46:3300/login/'
 export async function GET() {
   return new Response('Se debe ejecutar un POST con parametros de email y password. Saludos!')
 }

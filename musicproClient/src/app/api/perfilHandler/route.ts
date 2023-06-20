@@ -6,14 +6,14 @@ import jwt from "jsonwebtoken";
 const fastApiPerfil = "http://129.151.120.46:3300/perfil/";
 
 export async function GET(request: NextRequest, response: NextResponse) {
+
   const cookie = request.cookies.get("myToken");
   if (cookie) {
-    const decoded = jwt.verify(cookie.value, "secret").toString();
-    const decodedJson = JSON.parse(decoded) as { exp: number, email: string, username: string, id_rol: string };
-    const exp = decodedJson.exp;
-    const email = decodedJson.email;
-    const username = decodedJson.username;
-    const id_rol= decodedJson.id_rol;
+    const decoded = jwt.verify(cookie.value as string, "secret") as jwt.JwtPayload;
+const exp = decoded.exp;
+const email = decoded.email;
+const username = decoded.username;
+const id_rol = decoded.id_rol;
     
     const res = await axios.get(fastApiPerfil, {
       data: {

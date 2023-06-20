@@ -34,7 +34,10 @@ def root():
                 "nombre": "string",
                 "apellido": "string",
                 "rut": "string"
-            }
+            },
+            "/perfil/": {
+                "correo": "string"
+            },
         }
     }
 

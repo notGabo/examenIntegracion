@@ -17,35 +17,46 @@ app.add_middleware(
 )
 
 
-#get root
+# get root
 @app.get("/")
 def root():
-    return { 
+    return {
         "Endpoints": {
             "/login/": {
-                "email": "string",
-                "password": "string"
+                "metodo": "POST",
+                "parametros": {
+                    "email": "string",
+                    "password": "string"
+                }
             },
             "/registro/": {
-                "correo": "string",
-                "clave": "string",
-                "id_rol": "int",
-                "rol": "string",
-                "nombre": "string",
-                "apellido": "string",
-                "rut": "string"
+                "metodo": "POST",
+                "parametros": {
+                    "correo": "string",
+                    "clave": "string",
+                    "id_rol": "int",
+                    "rol": "string",
+                    "nombre": "string",
+                    "apellido": "string",
+                    "rut": "string"
+                }
             },
             "/perfil/": {
-                "correo": "string"
+                "metodo": "GET",
+                "parametros": {
+                    "correo": "string"
+                }
             },
         }
     }
 
 # Login
 
+
 class Login(BaseModel):
     email: str
     password: str
+
 
 @app.post("/login/")
 def iniciarSesion(session: Login):
@@ -86,7 +97,7 @@ def iniciarSesion(session: Login):
             rol = db.cursor.fetchone()[0]
             return {"mensaje": f"Bienvenido {nombre}",
                     "nombre": nombre,
-                    "apellido": apellido,  
+                    "apellido": apellido,
                     "email": email,
                     "username": username,
                     "id_rol": id_rol,
@@ -103,6 +114,7 @@ def iniciarSesion(session: Login):
 
 # Registro
 
+
 class Registro(BaseModel):
     correo: str
     clave: str
@@ -111,6 +123,7 @@ class Registro(BaseModel):
     nombre: str
     apellido: str
     rut: str
+
 
 @app.post('/registro/')
 def registrarUsuario(registro: Registro):
@@ -160,11 +173,13 @@ def registrarUsuario(registro: Registro):
     except Exception as e:
         return {"mensaje": f"Error en el servidor: {e}",
                 "respuesta": 500}
-    
+
 # Perfil
 
+
 class Perfil(BaseModel):
-    correo : str
+    correo: str
+
 
 @app.get('/perfil/')
 def perfilUsuario(correo: Perfil):
@@ -181,7 +196,7 @@ def perfilUsuario(correo: Perfil):
         elif db.cursor.rowcount == 1:
             print(datos)
             nombre = datos[0][0]
-            apellido = datos[0][1] 
+            apellido = datos[0][1]
             rut = datos[0][2]
             correo = datos[0][3]
             username = datos[0][4]

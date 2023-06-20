@@ -15,7 +15,7 @@ module.exports = {
       },
     },
   },
-  plugins: [require("daisyui"), require("@tailwindcss/typography")],
+  plugins: [require("daisyui"), require("@tailwindcss/typography") ],
 
   // daisyUI config (optional - here are the default values)
   daisyui: {

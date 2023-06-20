@@ -1,5 +1,6 @@
 import './globals.css'
 import { Inter } from 'next/font/google'
+import Provider from './components/Provider'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -16,7 +17,11 @@ export default function RootLayout({
 
   return (
     <html lang="es">
-      <body className={`${inter.className} bg-neutral-700`}>{children}</body>
+      <body className={`${inter.className} bg-neutral-700`} suppressHydrationWarning={true}>
+        <Provider>
+        {children}
+        </Provider>
+        </body>
       
     </html>
   )

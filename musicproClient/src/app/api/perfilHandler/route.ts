@@ -10,10 +10,11 @@ export async function GET(request: NextRequest, response: NextResponse) {
   const cookie = request.cookies.get("myToken");
   if (cookie) {
     const decoded = jwt.verify(cookie.value, "secret");
-    const exp = decoded.exp;
-    const email = decoded.email;
-    const username = decoded.username;
-    const id_rol= decoded.id_rol;
+    const decodedJson = JSON.stringify(decoded);
+    const exp = decodedJson.exp;
+    const email = decodedJson.email;
+    const username = decodedJson.username;
+    const id_rol= decodedJson.id_rol;
     
     const res = await axios.get(fastApiPerfil, {
       data: {

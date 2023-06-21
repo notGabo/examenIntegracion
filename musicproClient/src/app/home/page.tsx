@@ -45,6 +45,8 @@ export default function HomeAdmin() {
   useEffect(() => {
     const checkLoggedIn = async () => {
       const response = await axios.get("/api/perfilHandler");
+      console.log(response.data);
+      console.log(response.data.respuesta);
       if (response.data.respuesta !== 200) {
         router.push("/");
       } else {

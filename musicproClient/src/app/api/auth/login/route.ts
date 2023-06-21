@@ -29,10 +29,11 @@ export async function POST(request: NextRequest) {
       rol: data.rol,
     }, 'secret')
     const serialized = serialize('myToken', token, {
-      httpOnly: true,
+      httpOnly: false,
       secure: false,
       maxAge: 1000 * 60 * 60 * 24 * 30,
       path: '/',
+      
     })
 
     const response = new Response(JSON.stringify({

@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
       rol: data.rol,
     }, 'secret')
     const serialized = serialize('myToken', token, {
-      httpOnly: true,
+      httpOnly: false,
       secure: true,
       maxAge: 1000 * 60 * 60 * 24 * 30,
       path: '/',

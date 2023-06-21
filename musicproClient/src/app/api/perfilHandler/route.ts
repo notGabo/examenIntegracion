@@ -9,11 +9,12 @@ export async function GET(request: NextRequest, response: NextResponse) {
 
   const cookie = request.cookies.get("myToken");
   if (cookie) {
+
     const decoded = jwt.verify(cookie.value as string, "secret") as jwt.JwtPayload;
-const exp = decoded.exp;
-const email = decoded.email;
-const username = decoded.username;
-const id_rol = decoded.id_rol;
+    const exp = decoded.exp;
+    const email = decoded.email;
+    const username = decoded.username;
+    const id_rol = decoded.id_rol;
     
     const res = await axios.get(fastApiPerfil, {
       data: {
@@ -46,6 +47,7 @@ const id_rol = decoded.id_rol;
     JSON.stringify({
       mensaje: "El usuario no esta logueado",
       respuesta: 401,
+      cookie: cookie,
     })
   );
 }

@@ -8,7 +8,7 @@ const fastApiPerfil = "http://129.151.120.46:3300/perfil/";
 export async function GET(request: NextRequest, response: NextResponse) {
 
   const cookie = request.cookies.get("myToken");
-  console.log("cookie: "+cookie)
+  const cookieJson = JSON.stringify(cookie);
   if (cookie) {
 
     const decoded = jwt.verify(cookie.value as string, "secret") as jwt.JwtPayload;
@@ -46,9 +46,9 @@ export async function GET(request: NextRequest, response: NextResponse) {
   }
   return new Response(
     JSON.stringify({
-      mensaje: "El usuario no esta logueado  "+cookie,
+      mensaje: "El usuario no esta logueado  "+cookieJson,
       respuesta: 401,
-      cookie: cookie,
+      cookie: cookieJson,
     })
   );
 }

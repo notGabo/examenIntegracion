@@ -20,11 +20,15 @@ const CerrarSesionButton = () => {
   const router = useRouter();
 
   const handleCerrarSesion = async () => {
-    await axios.get("/api/auth/logout");
-    const cookies = document.cookie;
-    if (!cookies.includes("miCookie")) {
-      router.push("/login");
-    }
+    // get to /api/logout using fetch
+    const response = await fetch("/api/logout", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
+    console.log(response.body);
   };
 
   return (
@@ -44,19 +48,22 @@ export default function HomeAdmin() {
 
   useEffect(() => {
     const checkLoggedIn = async () => {
-      const response = await axios.get("/api/perfilHandler");
-      console.log(response.data);
-      console.log(response.data.respuesta);
-      if (response.data.respuesta !== 200) {
-        router.push("/");
-      } else {
-        console.log("No hay ninguna sesión iniciada");
+      const response = await fetch("/api/perfilHandler", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+      if (response.status === 200) {
+        console.log("sesion iniciada");
+      }
+      if (response.status !== 200) {
+        router.push("/login");
       }
     };
-
     checkLoggedIn();
   }, []);
-
   useEffect(() => {
     const fetchData = async () => {
       const profileData = await getProfile();

@@ -1,4 +1,5 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
+from fastapi.responses import JSONResponse
 import re
 import modelo as db
 from pydantic import BaseModel
@@ -15,7 +16,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 
 # get root
 @app.get("/")
@@ -51,13 +51,9 @@ def root():
     }
 
 # Login
-
-
 class Login(BaseModel):
     email: str
     password: str
-
-
 @app.post("/login/")
 def iniciarSesion(session: Login):
     email = session.email
@@ -95,26 +91,38 @@ def iniciarSesion(session: Login):
             queryRol = f"SELECT nombrerol FROM usuario WHERE correo = '{email}'"
             db.cursor.execute(queryRol)
             rol = db.cursor.fetchone()[0]
-            return {"mensaje": f"Bienvenido {nombre}",
+            return JSONResponse(
+                content={
+                    "mensaje": f"Bienvenido {nombre} {apellido}, tu sesion ha sido iniciada con exito",
+                    "respuesta": 200,
                     "nombre": nombre,
                     "apellido": apellido,
-                    "email": email,
+                    "correo": email,
                     "username": username,
                     "id_rol": id_rol,
-                    "rol": rol,
-                    "respuesta": 200}
+                    "rol": rol
+                },
+                status_code=200
+            )
         else:
-            return {"mensaje": "Usuario o contraseña incorrectos",
-                    "respuesta": 401}
+            return JSONResponse(
+                content={
+                    "mensaje": "El correo o la contraseña son incorrectos, vuelve a intentarlo",
+                    "respuesta": 401
+                },
+                status_code=401
+            )
     except Exception as e:
-        return {
-            "mensaje": f"Error en el servidor: {e}",
-            "respuesta": 500
-        }
+        return JSONResponse(
+            content={
+                "mensaje": "Ha ocurrido un error, vuelve a intentarlo",
+                "respuesta": 500,
+                "error": e
+            },
+            status_code=500
+        )
 
 # Registro
-
-
 class Registro(BaseModel):
     correo: str
     clave: str
@@ -123,7 +131,6 @@ class Registro(BaseModel):
     nombre: str
     apellido: str
     rut: str
-
 
 @app.post('/registro/')
 def registrarUsuario(registro: Registro):
@@ -136,30 +143,52 @@ def registrarUsuario(registro: Registro):
     rut = registro.rut
     try:
         if not re.match(r"[^@]+@[^@]+\.[^@]+", correo) and not re.match(r'^\d{7,8}-[\dkK]$', rut):
-            return {"mensaje": "El correo y el rut ingresado no son validos, vuelve a intentarlo",
+            return JSONResponse(
+                content={
+                    "mensaje": "El correo y el rut ingresados no son validos, vuelve a intentarlo",
                     "respuesta": 402
-                    }
+                },
+                status_code=402
+            )
         if not re.match(r"[^@]+@[^@]+\.[^@]+", correo):
-            return {"mensaje": "El correo ingresado no es valido, vuelve a intentarlo",
+            return JSONResponse(
+                content={
+                    "mensaje": "El correo ingresado no es valido, vuelve a intentarlo",
                     "respuesta": 402
-                    }
+                },
+                status_code=402
+            )
         if not re.match(r'^\d{7,8}-[\dkK]$', rut):
-            return {"mensaje": "El rut ingresado no es valido, vuelve a intentarlo",
+            return JSONResponse(
+                content={
+                    "mensaje": "El rut ingresado no es valido, vuelve a intentarlo",
                     "respuesta": 402
-                    }
+                },
+                status_code=402
+            )
 
         queryCorreo = f"SELECT correo FROM usuario WHERE correo = '{correo}'"
         db.cursor.execute(queryCorreo)
         db.cursor.fetchall()
         if db.cursor.rowcount == 1:
-            return {"mensaje": "El correo ya ha sido registrado, intente con otro",
-                    "respuesta": 403}
+            return JSONResponse(
+                content={
+                    "mensaje": "El correo ya ha sido registrado, intente con otro",
+                    "respuesta": 402
+                },
+                status_code=402
+            )
         queryRut = f"SELECT rut FROM usuario WHERE rut = '{rut}'"
         db.cursor.execute(queryRut)
         db.cursor.fetchall()
         if db.cursor.rowcount == 1:
-            return {"mensaje": "El rut ya ha sido registrado, intente con otro",
-                    "respuesta": 403}
+            return JSONResponse(
+                content={
+                    "mensaje": "El rut ya ha sido registrado, intente con otro",
+                    "respuesta": 402
+                },
+                status_code=402
+            )
         else:
             query = f"INSERT INTO usuario (correo, clave, id_rol,nombrerol, nombre, apellido, rut) VALUES ('{correo}', '{clave}',{id_rol},'{rol}', '{nombre}', '{apellido}', '{rut}')"
             db.cursor.execute(query)
@@ -167,19 +196,27 @@ def registrarUsuario(registro: Registro):
             queryUsername = f"SELECT USERNAME FROM usuario WHERE correo = '{correo}'"
             db.cursor.execute(queryUsername)
             username = db.cursor.fetchone()[0]
-            return {"mensaje": f"Bienvenido {nombre}, tu cuenta ha sido creada con exito, tu nombre de usuario es {username}",
-                    "respuesta": 200}
-
+            return JSONResponse(
+                content={
+                    "mensaje": f"El usuario {username} ha sido registrado con exito",
+                    "respuesta": 200,
+                    "username": username
+                },
+                status_code=200
+            )
     except Exception as e:
-        return {"mensaje": f"Error en el servidor: {e}",
-                "respuesta": 500}
-
+        return JSONResponse(
+            content={
+                "mensaje": "Ha ocurrido un error, vuelve a intentarlo",
+                "respuesta": 500,
+                "error": e
+            },
+            status_code=500
+        )
+    
 # Perfil
-
-
 class Perfil(BaseModel):
     correo: str
-
 
 @app.get('/perfil/')
 def perfilUsuario(correo: Perfil):
@@ -194,7 +231,6 @@ def perfilUsuario(correo: Perfil):
                     "respuesta": 402
                     }
         elif db.cursor.rowcount == 1:
-            print(datos)
             nombre = datos[0][0]
             apellido = datos[0][1]
             rut = datos[0][2]
@@ -202,14 +238,19 @@ def perfilUsuario(correo: Perfil):
             username = datos[0][4]
             id_rol = datos[0][5]
             rol = datos[0][6]
-            return {"nombre": nombre,
+            return JSONResponse(
+                content={
+                    "mensaje": "Datos obtenidos con exito",
+                    "respuesta": 200,
+                    "nombre": nombre,
                     "apellido": apellido,
                     "rut": rut,
                     "correo": correo,
                     "username": username,
                     "id_rol": id_rol,
-                    "rol": rol,
-                    "respuesta": 200}
+                    "rol": rol
+                },
+                status_code=200
+            )
     except Exception as e:
-        return {"mensaje": f"Error en el servidor: {e}",
-                "respuesta": 500}
+        return HTTPException(status_code=500, detail=f"Error en el servidor: {e}")

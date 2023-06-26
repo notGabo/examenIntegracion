@@ -11,6 +11,7 @@ dsn = os.getenv("db_dsn")
 
 try:
     con = oracledb.connect(user=username,password=password,dsn=dsn)
+    global cursor 
     cursor = con.cursor()
     # query = 'SELECT * FROM usuario'
     # cursor.execute(query)

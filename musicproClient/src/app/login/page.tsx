@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import axios from "axios";
 import Link from "next/link";
 
 export default function Login() {
@@ -12,51 +11,15 @@ export default function Login() {
     password: "",
   });
 
-  const handleChange = (e:any) => {
-    setCredentials({
-      ...credentials,
-      [e.target.name]: e.target.value,
-    });
-  };
+  
 
   const handleSubmit = async (e:any) => {
     e.preventDefault();
     const config = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      withCredentials: true,
-    };
-    const response = await axios.post("/api/auth/login", credentials, config);
-    const id = response.data.id_rol;
-    if (id === 1) {
-      console.log(response.data);
-      router.push("/home");
     }
-    console.log(response.data);
-    return response.data;
-  };
+  }
 
-  useEffect(() => {
-    const checkLoggedIn = async () => {
-      const response = await axios.get("/api/perfilHandler");
-      if (response.data.respuesta === 200) {
-        console.log(response.data.respuesta)
-        console.log(response.data.id_rol)
-        
-        if (response.data.id_rol) {
-          
-          router.push("/home");
-          
-        }
-      } else {
-        console.log("No hay ninguna sesión iniciada");
-      }
-    };
-
-    checkLoggedIn();
-  }, []);
-
+  
   return (
     <>
       <div className="mx-auto flex min-h-screen flex-col items-center justify-center px-6 py-8 md:h-screen lg:py-0">
@@ -84,7 +47,6 @@ export default function Login() {
                   type="text"
                   name="email"
                   id="email"
-                  onChange={handleChange}
                   className="focus:ring-primary-600 focus:border-primary-600 block w-full rounded-lg border-gray-600 bg-gray-700 p-2.5 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                   placeholder="correo@ejemplo.com"
                   required
@@ -101,7 +63,6 @@ export default function Login() {
                   type="password"
                   name="password"
                   id="password"
-                  onChange={handleChange}
                   className="focus:ring-primary-600 focus:border-primary-600 block w-full rounded-lg border-gray-600 bg-gray-700 p-2.5 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                   placeholder="********"
                   required

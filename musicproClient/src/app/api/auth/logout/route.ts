@@ -7,7 +7,8 @@ export async function GET(request: NextRequest, response: NextResponse) {
 
     // get cookie
     const cookie = request.cookies.get('myToken')
-    const token = jwt.sign({
+    if (cookie) {
+      const token = jwt.sign({
         exp: -1,
         email: '',
         password: '',
@@ -26,7 +27,10 @@ export async function GET(request: NextRequest, response: NextResponse) {
       
   
       res.headers.append('Set-Cookie', serialized)
-    return res;
+      return new Response(JSON.stringify({mensaje: 'Sesion cerrada'}), {status:200, statusText: 'Sesion cerrada'})
+    }
+    return new Response(JSON.stringify({mensaje: 'No se ha iniciado sesion'}), {status:201, statusText: 'No se ha iniciado sesion'})
+
   }
   
 

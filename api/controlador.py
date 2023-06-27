@@ -226,7 +226,6 @@ def perfilUsuario(correo: Perfil):
     correoQuery = correo.correo
     try:
         query = f"SELECT nombre, apellido, rut, correo, username, id_rol ,nombrerol FROM USUARIO WHERE CORREO = '{correoQuery}'"
-        print(query)
         db.cursor.execute(query)
         datos = db.cursor.fetchall()
         if db.cursor.rowcount == 0:
@@ -252,6 +251,53 @@ def perfilUsuario(correo: Perfil):
                     "username": username,
                     "id_rol": id_rol,
                     "rol": rol
+                },
+                status_code=200
+            )
+    except Exception as e:
+        return HTTPException(status_code=500, detail=f"Error en el servidor: {e}")
+
+# Get productos
+@app.get('/productos/')
+def getProductos():
+    try:
+        query = "select * from producto"
+        db.cursor.execute(query)
+        datos = db.cursor.fetchall()
+
+        datosLista = []
+        for i in range(db.cursor.rowcount):
+            id_producto = datos[i][0]
+            nombre = datos[i][1]
+            precio = datos[i][2]
+            marca = datos[i][3]
+            categoria = datos[i][4]
+            subcategoria = datos[i][5]
+            descripcion = datos[i][6]
+            stock = datos[i][7]
+            urlimagen = datos[i][8]
+            datosLista.append({
+                "id_producto": id_producto,
+                "nombre": nombre,
+                "precio": precio,
+                "marca": marca,
+                "categoria": categoria,
+                "subcategoria": subcategoria,
+                "descripcion": descripcion,
+                "stock": stock,
+                "urlimagen": urlimagen
+            })
+        
+        if db.cursor.rowcount == 0:
+            return {"mensaje": "No hay productos disponibles",
+                    "respuesta": 402
+                    }
+        elif db.cursor.rowcount > 0:
+            return JSONResponse(
+                content={
+                    "mensaje": "Productos obtenidos con exito",
+                    "respuesta": 200,
+                    "productos": datosLista
                 },
                 status_code=200
             )

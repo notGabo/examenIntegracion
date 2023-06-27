@@ -17,9 +17,6 @@ interface Producto {
   
 }
 
-
-
-
 export default function Catalogo() {
   const router = useRouter();
   const [productos, setProductos] = useState([] as Producto[]);

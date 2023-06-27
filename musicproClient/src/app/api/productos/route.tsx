@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET() {
-    const fastApiUrl = "http://0.0.0.0:12545/productos";
-    //const fastApiUrl = "http://129.151.120.46:3300/productos";
+    //const fastApiUrl = "http://0.0.0.0:12545/productos";
+    const fastApiUrl = "http://129.151.120.46:3300/productos";
     try{
         const res = await fetch(fastApiUrl, {
             method: "GET",

@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers"
 import jwt from "jsonwebtoken";
-const fastApiPerfil = "http://0.0.0.0:12545/perfil/";
-//const fastApiPerfil = "http://129.151.120.46:3300/perfil/";
+//const fastApiPerfil = "http://0.0.0.0:12545/perfil/";
+const fastApiPerfil = "http://129.151.120.46:3300/perfil/";
 
 export async function GET(request: NextRequest, response: NextResponse) {
   try{

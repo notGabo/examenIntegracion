@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken'
 import { serialize } from 'cookie'
 import { useRouter } from 'next/navigation'
 
-export async function GET(request: NextRequest, response: NextResponse) {
+export async function POST(request: NextRequest, response: NextResponse) {
 
     try{
       request.cookies.delete('myToken')

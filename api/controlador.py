@@ -60,9 +60,12 @@ def iniciarSesion(session: Login):
     password = session.password
     try:
         if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
-            return {"mensaje": "El correo ingresado no es valido, vuelve a intentarlo",
-                    "respuesta": 402
-                    }
+            return JSONResponse(
+                content={"mensaje": "El correo ingresado no es valido, vuelve a intentarlo",
+                    "respuesta": 401
+                    },
+                status_code=401
+            )
         query = f"SELECT correo, clave FROM usuario WHERE correo = '{email}' AND clave = '{password}'"
         db.cursor.execute(query)
         db.cursor.fetchall()

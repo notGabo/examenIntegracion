@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import axios from "axios";
+import { CgSpinnerAlt } from "react-icons/cg";
 
 export default function Register() {
   const router = useRouter();
@@ -16,10 +16,10 @@ export default function Register() {
     lastName: "",
     rut: "",
     rol: "0",
-    
   });
+
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
-  const [submitMessage, setSubmitMessage] = useState("")
+  const [submitMessage, setSubmitMessage] = useState(<></>)
   const handleChange = (e:any) => {
     setRegistro({
       ...registro,
@@ -33,9 +33,13 @@ export default function Register() {
       confirmPassword: e.target.value,
     });
   };
-
+  
   const handleSubmit = async (e:any) => {
     e.preventDefault();
+    setSubmitMessage(      
+      <div className="flex flex-col items-center transition duration-300 hover:scale-110 hover:text-orange-500">
+      <CgSpinnerAlt className="animate-spin h-8 w-8 text-neutral-400" />
+      </div>)
     let id_rol 
     let nombreRol 
     if (registro.rol === "6") {
@@ -63,13 +67,6 @@ export default function Register() {
       nombreRol = "Auditor"
     }
 
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      withCredentials: true,
-    };
-
     const datos ={
       "correo": registro.email,
       "clave": registro.password,
@@ -80,14 +77,32 @@ export default function Register() {
       "rut":registro.rut
     }
 
-    const response = await axios.post("/api/register", JSON.stringify(datos), config);
-    if (response.data.respuesta === 200) {
-      setSubmitMessage(response.data.mensaje); // Almacenar el mensaje de éxito en la variable de estado
-    } else {
-      setSubmitMessage(response.data.mensaje); // Almacenar el mensaje de error en la variable de estado
-    }
-  };
+    const response = await fetch("/api/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(datos),
+    });
 
+    const data = await response.json();
+
+    if (response.status === 200) {
+      setSubmitMessage(<p className="animation-bounce border-2 border-green-950 bg-green-600 text-l font-light text-center rounded-2xl text-neutral-800">Registro exitoso. Redireccionando...</p>);
+      setTimeout(() => {
+        router.push("/login");
+      }
+      , 1500);
+    } 
+    else if (response.status === 402) {
+      setSubmitMessage(<p className="border-2 border-red-950 bg-red-600 text-l font-light text-center rounded-2xl text-neutral-800">Error. {data.mensaje}</p>); 
+    }
+    else if (response.status === 500) {
+    setSubmitMessage(<p className="border-2 border-red-950 bg-red-600 text-l font-light text-center rounded-2xl text-neutral-800">Error. {data.mensaje}</p>);
+    };  
+  }
+
+  //verificador de campos
   useEffect(() => {
     const { email, password, confirmPassword, name, lastName, rol } = registro;
 
@@ -106,26 +121,6 @@ export default function Register() {
     // Actualizar el estado de isSubmitDisabled
     setIsSubmitDisabled(!isRequiredFieldsFilled || !doPasswordsMatch);
   }, [registro]);
-
-  useEffect(() => {
-    const checkLoggedIn = async () => {
-      const response = await axios.get("/api/perfilHandler");
-      if (response.data.respuesta === 200) {
-        console.log(response.data.respuesta)
-        console.log(response.data.id_rol)
-
-        if (response.data.id_rol) {
-          router.push("/home");
-        }
-
-      } else {
-        console.log("No hay ninguna sesión iniciada");
-      }
-    };
-
-    checkLoggedIn();
-  }, []);
-
 
   return (
     <div className="flex min-h-screen items-center justify-center">
@@ -284,18 +279,19 @@ export default function Register() {
                 : "bg-primary-600 hover:bg-primary-700 focus:ring-primary-300 focus:ring-primary-800 hover:bg-green-700 hover:text-white hover:shadow-2xl hover:shadow-white"
             } w-full rounded-lg bg-gray-300 px-5 py-2.5 text-center text-sm font-medium text-neutral-800 transition duration-300 focus:outline-none focus:ring-4`}
           >
+          
             {/* Iniciar Sesion */}
             {`${isSubmitDisabled ? "Iniciar Sesion (verifica los datos ingresados)": "Iniciar Sesion" } `}
           </button>
-{/* Mostrar el mensaje de envío */}
-{submitMessage  && <p className="bg-yellow-700 py-3 px-1 text-center border-4 border-yellow-900 rounded-xl">{submitMessage}</p>}
-            <p className="text-sm font-light text-gray-400">
-              ¿Aun no tienes una cuenta?
+            {/* Mostrar el mensaje de envío */}
+            {submitMessage}
+            <p className="text-sm text-center font-light text-gray-400">
+              ¿Ya tienes una cuenta?
               <Link
-                href="#"
+                href="/login"
                 className="text-primary-600 text-primary-500 font-medium hover:underline"
               >
-                ¡Solicita una a un administrador aqui!{" "}
+                ¡Inicia sesion aqui!{" "}
               </Link>
             </p>
           </form>

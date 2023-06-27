@@ -15,6 +15,18 @@ export async function POST(request: NextRequest, response: NextResponse){
         },
         body: jsonData,
     });
+
+    const data = await res.json();
+    if (res.status === 200){
+        return new Response(JSON.stringify(data), {status: 200});
+        
+    }
+    else if (res.status === 402){ 
+        return new Response(JSON.stringify(data), {status: 402});
+    }
+    else if (res.status === 500){ 
+        return new Response(JSON.stringify(data), {status: 500});
+    }
     const finalData = await res.json();
     return new Response(JSON.stringify(finalData), {});
 }

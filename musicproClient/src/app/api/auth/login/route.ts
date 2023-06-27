@@ -20,14 +20,15 @@ export async function POST(request: NextRequest) {
     body: JSON.stringify({ email, password }),
   })
   const data = await res.json()
-  console.log(data)
-  console.log(res.status)
-  console.log(res)
+  console.log(data);
+
   if (res.status === 200) {
     const token = jwt.sign({
       exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30,
-      email: data.email,
+      email: data.correo,
       password: password,
+      nombre: data.nombre,
+      apellido: data.apellido,
       username: data.username,
       id_rol: data.id_rol,
       rol: data.rol,

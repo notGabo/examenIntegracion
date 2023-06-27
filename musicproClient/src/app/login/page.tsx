@@ -1,24 +1,80 @@
 "use client"
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import { CgSpinnerAlt } from "react-icons/cg";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 export default function Login() {
   const router = useRouter();
+  const [submitMessage, setSubmitMessage] = useState(<></>)
   const [credentials, setCredentials] = useState({
     email: "",
     password: "",
   });
 
+  const handleChange = (e:any) => {
+    const { name, value } = e.target;
+    setCredentials((prevCredentials) => ({
+      ...prevCredentials,
+      [name]: value,
+    }));
+  };
   
-
   const handleSubmit = async (e:any) => {
     e.preventDefault();
-    const config = {
-    }
+    setSubmitMessage(      
+      <div className="flex flex-col items-center transition duration-300 hover:scale-110 hover:text-orange-500">
+      <CgSpinnerAlt className="animate-spin h-8 w-8 text-neutral-400" />
+      </div>)
+    const res = await fetch("/api/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(credentials),
+      })
+      
+      
+      if (res.status === 200) {
+        setSubmitMessage(<p className="border-2 border-green-950 bg-green-600 text-l font-light text-center rounded-2xl text-neutral-800">redireccionando...</p>)
+        setTimeout(() => {
+          router.push("/home");
+        }, 200);
+      }
+      if (res.status == 401) { 
+        setSubmitMessage (<p className="border-2 border-red-950 bg-red-600 text-l font-light text-center rounded-2xl text-neutral-800">Usuario o contraseña incorrectos</p>)
+      }
+      if (res.status == 500) {
+        setSubmitMessage (<p className="border-2 border-red-950 bg-red-600 text-l font-light text-center rounded-2xl text-neutral-800">Error interno del servidor. Notifiquelo a </p>)
+      }
   }
 
+  
+    // Verificar si el usuario ya posee una cookie
+    useEffect(() => {
+      const checkLoggedIn = async () => {
+        const response = await fetch("/api/sessionChecker", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        });
+        if (response.status === 200) {
+          setSubmitMessage(
+            <div className="bg-green-500 py-3 px-1 text-center border-4 text-white border-green-800 rounded-xl animate-pulse">
+              <p>Sesion iniciada mediante cookie, redireccionando...</p>
+            </div>)
+          router.push("/home");
+        }
+        else{
+          console.log("No se encontro cookie, por favor inicia sesion ")
+        }
+      };
+      checkLoggedIn();
+    }, []);
+  
   
   return (
     <>
@@ -44,6 +100,7 @@ export default function Login() {
                   Correo
                 </label>
                 <input
+                onChange={handleChange}
                   type="text"
                   name="email"
                   id="email"
@@ -60,6 +117,7 @@ export default function Login() {
                   Contraseña
                 </label>
                 <input
+                  onChange={handleChange}
                   type="password"
                   name="password"
                   id="password"
@@ -91,8 +149,8 @@ export default function Login() {
                   ¡Registrate aqui!
                 </Link>
               </p>
-              
             </form>
+            {submitMessage}
           </div>
         </div>
       </div>

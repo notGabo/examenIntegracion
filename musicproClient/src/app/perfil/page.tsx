@@ -67,19 +67,16 @@ export default function Perfil() {
       );  
     }
 
-  
-  
-
   return (
     <>
-      <Navmenu />
+      <Navmenu/>
       <div className="flex min-h-screen items-center justify-center">
-        <div className="mx-10 mb-10 mt-10 w-full max-w-md rounded-lg border  bg-neutral-900 p-6 shadow-lg md:mx-0">
+        <div className="mx-10 mb-10 mt-10 w-full max-w-md rounded-lg bg-neutral-900 p-6 shadow-lg md:mx-0">
           <div className="flex flex-col items-center justify-center">
-            <h1 className="font-VALORANT mb-6 text-2xl font-bold leading-tight text-rose-600"></h1>
+            <h1 className="mb-6 text-2xl font-bold leading-tight transition hover:text-red-800 cursor-default">Datos perfil</h1>
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
               <div className="flex flex-col">
-                <label className="font-VALORANT mb-2 text-sm text-red-800">
+                <label className="mb-2 text-sm text-red-800">
                   Username
                 </label>
                 <p className="mb-6 text-xl text-white">
@@ -87,19 +84,19 @@ export default function Perfil() {
                 </p>
               </div>
               <div className="flex flex-col">
-                <label className="font-VALORANT mb-2 text-sm text-red-800">
+                <label className="mb-2 text-sm text-red-800">
                   Correo electrónico
                 </label>
                 <p className="mb-6 text-xl text-white">{datosPerfil.email}</p>
               </div>
               <div className="flex flex-col">
-                <label className="font-VALORANT mb-2 text-sm text-red-800">
+                <label className="mb-2 text-sm text-red-800">
                   Nombre
                 </label>
                 <p className="mb-6 text-xl text-white">{datosPerfil.nombre}</p>
               </div>
               <div className="flex flex-col">
-                <label className="font-VALORANT mb-2 text-sm text-red-800">
+                <label className="mb-2 text-sm text-red-800">
                   Contraseña
                 </label>
                 <p className="mb-6 text-xl text-white">
@@ -107,7 +104,7 @@ export default function Perfil() {
                 </p>
               </div>
               <div className="flex flex-col">
-                <label className="font-VALORANT mb-2 text-sm text-red-800">
+                <label className="mb-2 text-sm text-red-800">
                   Apellido
                 </label>
                 <p className="mb-6 text-xl text-white">
@@ -115,13 +112,13 @@ export default function Perfil() {
                 </p>
               </div>
               <div className="flex flex-col">
-                <label className="font-VALORANT mb-2 text-sm text-red-800">
+                <label className="mb-2 text-sm text-red-800">
                   Id_Rol
                 </label>
                 <p className="mb-6 text-xl text-white">{datosPerfil.id_rol}</p>
               </div>
               <div className="flex flex-col">
-                <label className="font-VALORANT mb-2 text-sm text-red-800">
+                <label className="mb-2 text-sm text-red-800">
                   Rol
                 </label>
                 <p className="mb-6 text-xl text-white">{datosPerfil.rol}</p>

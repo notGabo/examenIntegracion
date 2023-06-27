@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest, response: NextResponse){
-    //const fastApiRegister = "http://0.0.0.0:12545/registro";
-    const fastApiRegister = "http://129.151.120.46:3300/registro";
+    const fastApiRegister = "http://0.0.0.0:12545/registro";
+    //const fastApiRegister = "http://129.151.120.46:3300/registro";
 
     const { correo, clave, id_rol, rol, nombre, apellido, rut  } = await request.json();
 

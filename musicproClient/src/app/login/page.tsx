@@ -46,7 +46,7 @@ export default function Login() {
         setSubmitMessage (<p className="border-2 border-red-950 bg-red-600 text-l font-light text-center rounded-2xl text-neutral-800">Usuario o contraseña incorrectos</p>)
       }
       if (res.status == 500) {
-        setSubmitMessage (<p className="border-2 border-red-950 bg-red-600 text-l font-light text-center rounded-2xl text-neutral-800">Error interno del servidor. Notifiquelo a </p>)
+        setSubmitMessage (<p className="border-2 border-red-950 bg-red-600 text-l font-light text-center rounded-2xl text-neutral-800">Error interno del servidor. Notifiquelo a @notGabo en github</p>)
       }
   }
 

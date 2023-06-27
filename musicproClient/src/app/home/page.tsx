@@ -19,7 +19,9 @@ export default function Home() {
       });
 
       const data = await response.json();
+      console.log(data);
       const datosCliente = data.data;
+      console.log(datosCliente);
       if (response.status === 200) {
         console.log('sesion iniciada')
       }
@@ -31,8 +33,6 @@ export default function Home() {
     checkLoggedIn();
   }, []);
 
-
-  
 
   return (
     <>

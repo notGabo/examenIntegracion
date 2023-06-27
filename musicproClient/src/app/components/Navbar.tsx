@@ -3,17 +3,124 @@ import { FiMenu } from "react-icons/fi";
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 export default function Navmenu() {
+  const router = useRouter();
   const [openNav, setOpenNav] = useState(false);
-  const [textButton, setTextButton] = useState(
-    <Link
-      href="/perfil"
-      className="block cursor-default rounded bg-white py-2 text-center text-gray-900 no-underline transition hover:bg-red-800 hover:text-white hover:shadow-2xl hover:shadow-white lg:px-5"
-    >
-      Mi perfil
-    </Link>
-  );    
+  const [paginas, setPaginas] = useState(<></>);
+
+  useEffect(() => {
+    const checkLoggedIn = async () => {
+      const response = await fetch("/api/sessionChecker", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+
+      const data = await response.json();
+      const datosCliente = data.data;
+      console.log(datosCliente);
+      let paginas = [
+        {
+          nombre: "",
+          href: "",
+        }
+      ];
+      switch (datosCliente.id_rol) {
+        case 1:
+          paginas = [
+            {
+              nombre: "Ventas",
+              href: "/ventas",
+            },
+            {
+              nombre: "Desempeño",
+              href: "/desempeño",
+            },
+            {
+              nombre: "Estrategias",
+              href: "/estrategias",
+            },
+          ];
+          break;
+        case 2:
+          paginas = [
+            {
+              nombre: "Productos",
+              href: "/productos",
+            },
+            {
+              nombre: "Pedidos",
+              href: "/pedidos",
+            },
+            {
+              nombre: "pagos",
+              href: "/pagos",
+            },
+          ];
+          break;
+        case 3:
+          paginas = [
+            {
+              nombre: "Preparar",
+              href: "/preparacion",
+            },
+            {
+              nombre: "Entregar",
+              href: "/entrega",
+            },
+          ];
+          break;
+        case 4:
+          paginas = [
+            {
+              nombre: "Productos",
+              href: "/productos",
+            },
+            {
+              nombre: "Pagos",
+              href: "/pagos",
+            },
+          ];
+          break;
+        case 5:
+          paginas = [];
+          break;
+        case 6:
+          paginas = [
+            {
+              nombre: "Catalogo",
+              href: "/catalogo",
+            },
+            {
+              nombre: "Carrito",
+              href: "/carrito",
+            },
+          ];
+          break;
+        default:
+          router.push("/");
+          break;
+      }
+      setPaginas(<> 
+        {paginas.map((pagina) => (
+          <li key={pagina.nombre}>
+            <Link
+              href={pagina.href}
+              className="block cursor-default py-2 text-center transition hover:text-red-800 lg:px-5"
+            >
+              {pagina.nombre}
+            </Link>
+          </li>
+        ))}
+      </>);
+
+    };
+    checkLoggedIn();
+  }, []);
 
   return (
     <header className="border-b  bg-neutral-900 py-3 shadow-md">
@@ -28,7 +135,7 @@ export default function Navmenu() {
         </Link>
 
         <FiMenu
-          className="block h-6 w-6 cursor-pointer text-rose-600 lg:hidden"
+          className="block h-6 w-6 cursor-pointer  lg:hidden"
           onClick={() => setOpenNav(!openNav)}
         />
 
@@ -38,31 +145,14 @@ export default function Navmenu() {
           } w-full transition-opacity duration-200 ease-in lg:flex lg:w-auto lg:items-center`}
         >
           <ul className="text-base  lg:flex lg:justify-between">
-            <li>
+            { paginas }
+            <li className="px-5">
               <Link
-                href="/"
-                className="block cursor-default py-2 text-center transition hover:text-red-800 lg:px-5"
-              >
-                SamplePage
+                href="/perfil"
+                className="block cursor-default rounded bg-white py-2 text-center text-gray-900 no-underline transition hover:bg-red-800 hover:text-white hover:shadow-2xl hover:shadow-white lg:px-5">
+                Mi perfil
               </Link>
             </li>
-            <li>
-              <Link
-                href="/infografias"
-                className="block cursor-default py-2 text-center transition hover:text-red-800 lg:px-5"
-              >
-                SamplePage
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/"
-                className="block cursor-default py-2 text-center transition hover:text-red-800 lg:px-5"
-              >
-                SamplePage
-              </Link>
-            </li>
-            <li>{textButton}</li>
           </ul>
         </nav>
       </div>

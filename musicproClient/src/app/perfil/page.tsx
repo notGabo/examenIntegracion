@@ -22,9 +22,8 @@ export default function Perfil() {
   const cerrarSesion = async () => {
     setBtnCerrarSesion(<button disabled className="mt-8 rounded-lg bg-orange-600 px-4 py-2 text-white shadow-lg transition duration-300 hover:bg-amber-600">Cerrando sesion...</button>)
     const response = await fetch("/api/auth/logout", {
-      method: "POST",
+      method: "GET",
       headers: { "Content-Type": "application/json" },
-      credentials: "include",
     });
     if (response.status === 200) {
       console.log("sesion cerrada");

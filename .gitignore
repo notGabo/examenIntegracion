@@ -39,3 +39,6 @@
 # typescript
 /musicproClient/*.tsbuildinfo
 /musicproClient/next-env.d.ts
+
+#pycache
+/api/__pycache__/

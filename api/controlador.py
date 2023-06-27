@@ -303,3 +303,4 @@ def getProductos():
             )
     except Exception as e:
         return HTTPException(status_code=500, detail=f"Error en el servidor: {e}")
+    

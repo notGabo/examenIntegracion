@@ -20,13 +20,9 @@ export async function GET(request: NextRequest, response: NextResponse) {
         maxAge: -1,
         path: '/',
       })
-  
-      const res = new Response(JSON.stringify({
-        mensaje: 'Sesion cerrada',
-      }), {})
       
   
-      res.headers.append('Set-Cookie', serialized)
+      response.headers.append('Set-Cookie', serialized)
       return new Response(JSON.stringify({mensaje: 'Sesion cerrada'}), {status:200, statusText: 'Sesion cerrada'})
     }
     return new Response(JSON.stringify({mensaje: 'No se ha iniciado sesion'}), {status:201, statusText: 'No se ha iniciado sesion'})

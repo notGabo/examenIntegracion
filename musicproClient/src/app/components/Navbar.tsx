@@ -22,7 +22,6 @@ export default function Navmenu() {
 
       const data = await response.json();
       const datosCliente = data.data;
-      console.log(datosCliente);
       let paginas = [
         {
           nombre: "",

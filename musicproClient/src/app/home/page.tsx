@@ -18,15 +18,11 @@ export default function Home() {
         credentials: "include",
       });
 
-      const data = await response.json();
-      console.log(data);
-      const datosCliente = data.data;
-      console.log(datosCliente);
       if (response.status === 200) {
-        console.log('sesion iniciada')
+        console.log("sesion iniciada");
       }
       else{
-        console.log("No se encontro cookie, por favor inicia sesion ")
+        
         router.push('/login')
       }
     };

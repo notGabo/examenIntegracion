@@ -127,7 +127,7 @@ export default function Producto() {
             <div>
                 <h1 className="text-5xl font-bold">{producto.nombre}</h1>
                 <p className="py-3">{producto.descripcion}</p>
-                <p>Stock: {producto.stock}</p>
+                <p>Stock:   {producto.stock}</p>
                 <p className="badge badge-outline bg-red-800">{producto.categoria}</p>
                 <p className="badge badge-outline bg-red-800">{producto.subcategoria}</p>
             </div>

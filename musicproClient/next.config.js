@@ -1,4 +1,5 @@
 const nextConfig = {
+  env:{fastApiUrl:process.env.FAST_API},
    
   };
   

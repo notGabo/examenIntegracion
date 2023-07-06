@@ -2,7 +2,7 @@ import { NextResponse, NextRequest } from 'next/server'
 import jwt from 'jsonwebtoken'
 import { serialize } from 'cookie'
  
-const fastApiLogin = process.env.FAST_API + "/login/";
+const fastApi = process.env.FAST_API + "/login/";
 
 export async function GET() {
   return new Response('Se debe ejecutar un POST con parametros de email y password. Saludos!')
@@ -11,7 +11,7 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   const { email, password } = await request.json()
 
-  const res = await fetch(fastApiLogin, {
+  const res = await fetch(fastApi, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

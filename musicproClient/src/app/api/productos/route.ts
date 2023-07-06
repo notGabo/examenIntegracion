@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET() {
-    const fastApiProductos = process.env.FAST_API + "/productos";
-    
+    const fastApi = process.env.FAST_API + "/productos";
+
     try{
-        const res = await fetch(fastApiProductos, {
+        const res = await fetch(fastApi, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",

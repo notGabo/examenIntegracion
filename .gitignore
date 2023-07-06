@@ -31,7 +31,7 @@
 /musicproClient/yarn-error.log*
 
 # local env files
-/musicproClient/.env*.local
+/musicproClient/.env*
 
 # vercel
 /musicproClient/.vercel

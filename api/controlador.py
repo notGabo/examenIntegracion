@@ -20,35 +20,7 @@ app.add_middleware(
 # get root
 @app.get("/")
 def root():
-    return {
-        "Endpoints": {
-            "/login/": {
-                "metodo": "POST",
-                "parametros": {
-                    "email": "string",
-                    "password": "string"
-                }
-            },
-            "/registro/": {
-                "metodo": "POST",
-                "parametros": {
-                    "correo": "string",
-                    "clave": "string",
-                    "id_rol": "int",
-                    "rol": "string",
-                    "nombre": "string",
-                    "apellido": "string",
-                    "rut": "string"
-                }
-            },
-            "/perfil/": {
-                "metodo": "GET",
-                "parametros": {
-                    "correo": "string"
-                }
-            },
-        }
-    }
+    return {"Hola!"}
 
 # Login
 class Login(BaseModel):

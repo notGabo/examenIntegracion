@@ -17,6 +17,7 @@ export default function Perfil() {
     rol: "",
   });
   const [btnCerrarSesion, setBtnCerrarSesion] = useState(<></>);
+  const [mostrarClave, setMostrarClave ] = useState(false);
 
 
   const cerrarSesion = async () => {
@@ -30,6 +31,15 @@ export default function Perfil() {
       router.push("/login");
     }
   };
+
+  const showPassword = () => {
+    setMostrarClave(!mostrarClave);
+    if (mostrarClave) {
+      setMostrarClave(false); 
+    } else {
+      setMostrarClave(true);
+    }
+  }
 
   useEffect(() => {
     const checkLoggedIn = async () => {
@@ -96,10 +106,13 @@ export default function Perfil() {
               </div>
               <div className="flex flex-col">
                 <label className="mb-2 text-sm text-red-800">
-                  Contraseña
+                  <div className="flex gap-2">
+                    Contraseña 
+                    <button className="text-[10px]" onClick={showPassword}>(Mostrar clave)</button>
+                  </div>
                 </label>
-                <p className="mb-6 text-xl text-white">
-                {datosPerfil.password.length > 0 ? "*".repeat(datosPerfil.password.length) : "" }
+                <p id='password' className="mb-6 text-xl text-white">
+                {mostrarClave ? datosPerfil.password : "*".repeat(datosPerfil.password.length)}
                 </p>
               </div>
               <div className="flex flex-col">

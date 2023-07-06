@@ -17,12 +17,33 @@ interface Producto {
   descripcion: string;
   stock: number;
   urlimagen: string;
- 
 }
+
+interface Carrito {
+  id_producto: number;
+  nombre: string
+  precio: number;
+  cantidad: number;
+  urlimagen: string;
+}[]
 
 export default function Catalogo() {
   const router = useRouter();
   const [productos, setProductos] = useState([] as Producto[]);
+  const [carrito, setCarrito] = useState([] as Carrito[]);
+
+  const handleCambioCarrito = (e : any) => {
+}
+
+  const sumarAlCarrito = async (e : any) => {
+    e.preventDefault();
+    // console.log all the values from the form
+    console.log("id: "+e.target[0].value)
+    console.log("nombre: "+e.target[1].value)
+    console.log("precio: "+e.target[2].value)
+    console.log("cantidad: "+e.target[4].value)
+    console.log("imagen: "+e.target[3].value)
+  }
 
   useEffect(() => {
     const checkLoggedIn = async () => {
@@ -35,11 +56,9 @@ export default function Catalogo() {
       });
 
       const data = await response.json();
-      const datosCliente = data.data;
       if (response.status === 200) {
-
+        console.log("sesion iniciada");
       } else {
-
         router.push("/login");
       }
     };
@@ -56,6 +75,7 @@ export default function Catalogo() {
 
         if (response.status === 200) {
           setProductos(body.productos);
+          console.log(productos)
         } else {
   
         }
@@ -64,6 +84,7 @@ export default function Catalogo() {
     checkLoggedIn();
     getProductos();
   }, []);
+
 
   // load spinner while productos is fetching data
   if (productos.length === 0) {
@@ -84,7 +105,7 @@ export default function Catalogo() {
       <div className="m-16 min-h-screen ">
         <div className="grid grid-cols-1 gap-20 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           {productos.map((producto) => (
-            
+             <form onSubmit={sumarAlCarrito}>
             <div className="card bg-base-100 shadow-xl transition duration-300 hover:scale-105 hover:shadow-white">
               <figure>
                 <img
@@ -95,26 +116,34 @@ export default function Catalogo() {
               </figure>
               <div className="card-body">
               <Link href={`/catalogo/${producto.id_producto}`}>
-                <h2 className="card-title">{producto.nombre}</h2>
+                <div className="flex gap-5">
+                  <h2 className="card-title" id={`nombre-${producto.id_producto}`}>{producto.nombre}</h2>
+                  <p className="text-[10px]" id={`id-${producto.id_producto}`}>id: {producto.id_producto}</p>
+                </div>
                 </Link>
-                <p>{producto.descripcion}</p>
+                <p id={`descripcion-${producto.id_producto}`}>{producto.descripcion}</p>
                 <div className="card-actions justify-end">
-                  <div className="badge badge-outline">
-                    {producto.categoria}
+                  <div className="badge badge-outline text-[8px] sm:text-base">
+                    <p id={`categoria-${producto.id_producto}`}>{producto.categoria}</p>
                   </div>
                 </div>
                 <div>
-                  <p className="card-status">${producto.precio}</p>
-                  <p className="card-status">Stock: {producto.stock}</p>
+                  <p className="card-status" id={`precio-${producto.id_producto}`} >${producto.precio}</p>
+                  <p className="card-status" id={`precio-${producto.id_producto}`}>Stock: {producto.stock}</p>
                 </div>
                 <div className="card-actions justify-end pt-3">
-                <input type="number" placeholder="1" className="w-20 input border-white active:border-white" min={1} max={producto.stock} />
-                  <button className="btn bg-amber-600 text-white hover:bg-green-600 hover:text-black">
-                    Añadir al carrito
+                <input type="hidden" value={producto.id_producto}/>
+                <input type="hidden" value={producto.nombre}/>
+                <input type="hidden" value={producto.precio}/>
+                <input type="hidden" value={producto.urlimagen}/>
+                <input type="number" placeholder="1" className="w-20 input border-white active:border-white" disabled={ producto.stock === 0 ? true : false } defaultValue={ producto.stock === 0 ? 0 : 1 } min={1} max={producto.stock} onChange={handleCambioCarrito}/>
+                  <button className="btn bg-amber-600 text-white hover:bg-green-600 hover:text-black" disabled={ producto.stock === 0 ? true : false }>
+                    {producto.stock === 0 ? 'No hay stock' : 'Agregar al carrito'}
                   </button>
                 </div>
                 </div>
           </div>
+          </form>
           ))}
 
         </div>
@@ -123,4 +152,5 @@ export default function Catalogo() {
       <Footer />
     </>
   );
+  
 }

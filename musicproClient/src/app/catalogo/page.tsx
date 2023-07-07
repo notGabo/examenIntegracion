@@ -32,20 +32,24 @@ export default function Catalogo() {
   const [productos, setProductos] = useState([] as Producto[]);
   const [carrito, setCarrito] = useState([] as Carrito[]);
 
-  const handleCambioCarrito = (e: any) => {};
-
   const sumarAlCarrito = async (e: any) => {
     e.preventDefault();
-    setCarrito([
-      ...carrito,
-      {
-        id_producto: e.target[0].value,
-        nombre: e.target[1].value,
-        precio: e.target[2].value,
-        cantidad: e.target[4].value,
-        urlimagen: e.target[3].value,
-      },
-    ]);
+      let productoEncontrado = carrito.find((producto) => producto.id_producto === e.target[0].value);
+      if (productoEncontrado) {
+        productoEncontrado.cantidad = Number(productoEncontrado.cantidad) + Number(e.target[4].value);
+        setCarrito([...carrito]);
+      } else {
+        setCarrito([
+          ...carrito,
+          {
+            id_producto: e.target[0].value,
+            nombre: e.target[1].value,
+            precio: e.target[2].value,
+            cantidad: e.target[4].value,
+            urlimagen: e.target[3].value,
+          },
+        ]);
+    }
   };
 
   useEffect(() => {
@@ -78,7 +82,6 @@ export default function Catalogo() {
 
       if (response.status === 200) {
         setProductos(body.productos);
-        console.log(productos);
       } else {
       }
     };
@@ -170,7 +173,6 @@ export default function Catalogo() {
                       defaultValue={producto.stock === 0 ? 0 : 1}
                       min={1}
                       max={producto.stock}
-                      onChange={handleCambioCarrito}
                     />
                     <button
                       className="btn bg-amber-600 text-white hover:bg-green-600 hover:text-black"

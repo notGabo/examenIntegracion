@@ -38,7 +38,6 @@ export async function POST(request: NextRequest) {
       secure: true,
       maxAge: 1000 * 60 * 60 * 24 * 30,
       path: '/',
-      
     })
 
     const response = new Response(JSON.stringify({

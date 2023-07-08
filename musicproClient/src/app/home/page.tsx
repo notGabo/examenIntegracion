@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Navmenu from "../components/Navbar";
+import Footer from "../components/Footer";
 
 
 
@@ -33,6 +34,7 @@ export default function Home() {
   return (
     <>
       <Navmenu />  
+      <Footer/>
     </>
   );
 }

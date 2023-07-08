@@ -32,6 +32,30 @@ export default function Catalogo() {
   const [productos, setProductos] = useState([] as Producto[]);
   const [carrito, setCarrito] = useState([] as Carrito[]);
 
+  //if the page is reloaded by f5 or by url, the cookie will be overwritten, so we need to do a get request to the server to get the cookie again and set it in the client
+  useEffect(() => {
+    const checkCookieCarrito = async () => {
+      const response = await fetch("/api/carrito", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+      const body = await response.json();
+      if (response.status === 200) {
+        setCarrito(body.data.carrito);
+      }
+      else if (response.status === 500){
+        console.log("error al obtener carrito");
+      }
+      else{
+        console.log("No se ha encontrado carrito");
+      }
+    };
+    checkCookieCarrito();
+  }, []);
+
   const sumarAlCarrito = async (e: any) => {
     e.preventDefault();
       let productoEncontrado = carrito.find((producto) => producto.id_producto === e.target[0].value);
@@ -52,6 +76,28 @@ export default function Catalogo() {
     }
   };
 
+  //useEffect para carrito
+  useEffect(() => {
+    const guardarCarrito = async () => {
+      const response = await fetch("/api/carrito", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({ carrito: carrito }),
+      });
+      const body = await response.json();
+      if (response.status === 200) {
+        console.log("carrito guardado");
+      }
+    };
+    if (carrito.length > 0) {
+      guardarCarrito();
+    }
+  }, [carrito]);
+
+  // use effect para sesion y productos
   useEffect(() => {
     const checkLoggedIn = async () => {
       const response = await fetch("/api/sessionChecker", {
@@ -61,11 +107,7 @@ export default function Catalogo() {
         },
         credentials: "include",
       });
-
-      const data = await response.json();
-      if (response.status === 200) {
-        console.log("sesion iniciada");
-      } else {
+      if (response.status !== 200) {
         router.push("/login");
       }
     };
@@ -79,13 +121,10 @@ export default function Catalogo() {
         credentials: "include",
       });
       const body = await response.json();
-
       if (response.status === 200) {
         setProductos(body.productos);
-      } else {
       }
     };
-
     checkLoggedIn();
     getProductos();
   }, []);
@@ -99,6 +138,7 @@ export default function Catalogo() {
           <CgSpinnerAlt className="h-10 w-10 animate-spin" />
           Cargando productos....
         </div>
+        <Footer/>
       </>
     );
   }
@@ -140,7 +180,7 @@ export default function Catalogo() {
                     {producto.descripcion}
                   </p>
                   <div className="card-actions justify-end">
-                    <div className="badge badge-outline text-[8px] sm:text-base">
+                    <div className="badge badge-outline text-[13px] ">
                       <p id={`categoria-${producto.id_producto}`}>
                         {producto.categoria}
                       </p>
@@ -188,7 +228,6 @@ export default function Catalogo() {
             </form>
           ))}
         </div>
-        {/* Agrega aquí los otros elementos de la cuadrícula */}
       </div>
       <Footer />
     </>

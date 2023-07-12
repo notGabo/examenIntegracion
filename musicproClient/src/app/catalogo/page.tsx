@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import { CgSpinnerAlt } from "react-icons/cg";
 import Footer from "../components/Footer";
 import Link from "next/link";
+import { toast, ToastContainer, Flip } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 
 interface Producto {
   id_producto: number;
@@ -21,6 +23,8 @@ interface Producto {
 interface Carrito {
   id_producto: number;
   nombre: string;
+  categoria: string;
+  subcategoria: string;
   precio: number;
   cantidad: number;
   urlimagen: string;
@@ -31,6 +35,7 @@ export default function Catalogo() {
   const router = useRouter();
   const [productos, setProductos] = useState([] as Producto[]);
   const [carrito, setCarrito] = useState([] as Carrito[]);
+  
 
   //if the page is reloaded by f5 or by url, the cookie will be overwritten, so we need to do a get request to the server to get the cookie again and set it in the client
   useEffect(() => {
@@ -45,6 +50,7 @@ export default function Catalogo() {
       const body = await response.json();
       if (response.status === 200) {
         setCarrito(body.data.carrito);
+        
       }
       else if (response.status === 500){
         console.log("error al obtener carrito");
@@ -58,28 +64,54 @@ export default function Catalogo() {
 
   const sumarAlCarrito = async (e: any) => {
     e.preventDefault();
+    try{
       let productoEncontrado = carrito.find((producto) => producto.id_producto === e.target[0].value);
       if (productoEncontrado) {
-        productoEncontrado.cantidad = Number(productoEncontrado.cantidad) + Number(e.target[4].value);
+        productoEncontrado.cantidad = Number(productoEncontrado.cantidad) + Number(e.target[6].value);
         setCarrito([...carrito]);
       } else {
+        // if cantidad from cookie is equal from stock from database, then we can't add more products
         setCarrito([
           ...carrito,
           {
             id_producto: e.target[0].value,
             nombre: e.target[1].value,
             precio: e.target[2].value,
-            cantidad: e.target[4].value,
-            urlimagen: e.target[3].value,
+            categoria: e.target[3].value,
+            subcategoria: e.target[4].value,
+            cantidad: e.target[6].value,
+            urlimagen: e.target[5].value,
           },
         ]);
-    }
-  };
+      }
+      toast.success(e.target[1].value +' agregad@ al carrito', {
+        position: "bottom-right",
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        });
+      } catch (error) {
+        console.log('Error al agregar al carrito: '+error);
+        toast.error('Error al agregar: '+ e.target[1].value, {
+          position: "bottom-right",
+          autoClose: 2500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",});
+      }
+    };
 
   //useEffect para carrito
   useEffect(() => {
     const guardarCarrito = async () => {
-      const response = await fetch("/api/carrito", {
+      await fetch("/api/carrito", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -87,10 +119,6 @@ export default function Catalogo() {
         credentials: "include",
         body: JSON.stringify({ carrito: carrito }),
       });
-      const body = await response.json();
-      if (response.status === 200) {
-        console.log("carrito guardado");
-      }
     };
     if (carrito.length > 0) {
       guardarCarrito();
@@ -204,6 +232,8 @@ export default function Catalogo() {
                     <input type="hidden" value={producto.id_producto} />
                     <input type="hidden" value={producto.nombre} />
                     <input type="hidden" value={producto.precio} />
+                    <input type="hidden" value={producto.categoria} />           
+                    <input type="hidden" value={producto.subcategoria} />             
                     <input type="hidden" value={producto.urlimagen} />
                     <input
                       type="number"
@@ -229,6 +259,8 @@ export default function Catalogo() {
           ))}
         </div>
       </div>
+        <ToastContainer
+        transition={Flip}/>
       <Footer />
     </>
   );

@@ -98,6 +98,10 @@ export default function Navmenu() {
               nombre: "Carrito",
               href: "/carrito",
             },
+            {
+              nombre: "Seguimiento",
+              href: "/seguimiento",
+            }
           ];
           break;
         default:

@@ -2,6 +2,7 @@ import { NextRequest } from 'next/server'
 import jwt from 'jsonwebtoken'
 import { serialize } from 'cookie'
 import { cookies } from "next/headers"
+import { error } from 'console'
  
 
 export async function POST(request: NextRequest) {
@@ -51,4 +52,26 @@ export async function GET() {
       }), { status: 500 });
     }
   }
+
+export async function PUT(request: NextRequest) {
+  // delete carrito cookie
+  try{
+    const cookie = cookies().get('carrito')
+    if (cookie) {
+      cookies().set({
+        name: 'carrito',
+        value: '',
+        expires: new Date('1980-01-01'),
+        path: '/', // For all paths
+      })
+      return new Response (JSON.stringify('cookie eliminada'),{status:200})
+    }
+    return new Response (JSON.stringify({message: "Error al eliminar el carrito", error: error}),{status:500})
+  } catch (error) {
+    return new Response(JSON.stringify({
+      message: "Error al eliminar el carrito",
+      error: error
+    }), { status: 500 });
+  }
+}
   

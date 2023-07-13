@@ -7,13 +7,34 @@ import { CgSpinnerAlt } from "react-icons/cg";
 import { toast, ToastContainer, Flip } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 import Link from "next/link";
+import WebpayPlus from "transbank-sdk/dist/es5/transbank/webpay/webpay_plus";
 
 export default function Carrito() {
   const router = useRouter();
   const [carrito, setCarrito] = useState([] as any[]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [tokenTb, setTokenTb] = useState("");
+  const [urlTb, setUrlTb] = useState("");
 
+  const handleSubmit = async (e:any) => { 
+    const response = await fetch("/api/webpay", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify({total: total}),
+    });
+    const body = await response.json();
+    const token  = body.token;
+    const url = body.url;
+    setTokenTb(token);
+    setUrlTb(url);
+    console.log(token);
+    console.log(url);
+    
+  }  
 
   const vaciarCarrrito = async () => {
     try {
@@ -24,7 +45,6 @@ export default function Carrito() {
         },
         credentials: "include",
       });
-      const body = await response.json();
       if (response.status === 200) {
         setCarrito([]);
         setTotal(0);
@@ -35,43 +55,6 @@ export default function Carrito() {
       console.log("Error al vaciar carrito: ", error);
     }
   }
-
-  const comprar = async () => {
-    try{
-      const response = await fetch("/api/compra", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      });
-      if (response.status === 200) {
-        toast.success("Compra realizada con éxito", {
-          position: "bottom-right",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true
-          });
-        setCarrito([]);
-        setTotal(0);
-      } else {
-        toast.error("Error al realizar la compra", {
-          position: "bottom-right",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true
-          }); 
-        console.log("error al vaciar carrito");
-      }
-    } catch (error) {
-    }
-  }
-
-
 
   useEffect(() => {
     const checkLoggedIn = async () => {
@@ -142,6 +125,7 @@ export default function Carrito() {
         <h1 className="pt-5 text-3xl font-bold">Carrito</h1>
       </div>
       <div>
+        <form onSubmit={handleSubmit} action={urlTb} method="POST">
         <div className="flex h-screen flex-col items-center justify-center">
           {carrito.length === 0 ? (
             <div className="mx-5 flex h-screen items-center justify-center gap-1">
@@ -220,26 +204,27 @@ export default function Carrito() {
               </table>
             </div>
           )}
-          <div className="flex flex-col items-center justify-center py-7">
+          <div className="flex flex-col items-center justify-center">
             <button
-              className="btn-primary btn mt-4"
-              disabled={carrito.length === 0 ? true : false}
-              onClick={comprar}>
+              className="btn-primary btn"
+              disabled={carrito.length === 0 ? true : false}>
               Comprar
             </button>
             {
               carrito.length !== 0 ? (
-                <button
-                className="btn-accent btn mt-4 text-white"
-                disabled={carrito.length === 0 ? true : false}
-                onClick={vaciarCarrrito}
-                >
-                  Vaciar carrito
-                </button>
+                  <div
+                  className={`btn text-white mt-2`+ `${carrito.length === 0 ? ' btn-disabled' : ' btn-accent'}`}
+                  onClick={vaciarCarrrito}
+                  >
+                    Vaciar carrito
+                  </div>
               ) : null
             }
           </div>
         </div>
+        <input type="hidden" value={total} />
+        <input type="hidden" name="token_ws" value={tokenTb}/>
+        </form>
       </div>
       <ToastContainer 
          transition={Flip}

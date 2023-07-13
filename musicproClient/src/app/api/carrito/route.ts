@@ -7,7 +7,6 @@ import { error } from 'console'
 
 export async function POST(request: NextRequest) {
     const { carrito } = await request.json()
-    console.log(carrito)
     try{
         const token = jwt.sign({
             carrito: carrito,

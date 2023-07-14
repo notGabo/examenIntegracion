@@ -134,7 +134,7 @@ export default function Navmenu() {
           className="flex rounded-2xl bg-red-800 p-1 px-2 transition duration-300 hover:bg-amber-800 hover:shadow-2xl hover:shadow-amber-800 "
         >
           <Image src="/img/logo.png" alt="logo" width={50} height={50} />
-          <p className="cursor-default py-2 text-2xl ">MusicPro</p>
+          <p className="cursor-default py-2 text-2xl">MusicPro</p>
         </Link>
 
         <FiMenu

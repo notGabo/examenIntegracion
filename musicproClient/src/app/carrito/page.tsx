@@ -227,7 +227,7 @@ export default function Carrito() {
         </form>
       </div>
       <ToastContainer 
-         transition={Flip}
+        transition={Flip}
       />
       <Footer />
     </>

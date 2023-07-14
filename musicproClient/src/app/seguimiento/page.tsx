@@ -197,11 +197,8 @@ export default function Seguimiento() {
         </div>*/}
 
 
-                <div 
-                className={ `${compras.length === 0 ? null : "grid grid-cols-1 gap-20 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3"}`  }
-                >
-                {
-                    compras.length === 0 ? (
+                <div className={ `${compras.length === 0 ? null : "grid grid-cols-1 gap-20 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3"}`  }>
+                {compras.length === 0 ? (
                         <div className="mx-5 flex h-screen items-center justify-center gap-1">
                         <p>
                           Aun no has comprado nada! Para comprar ve a {" "}
@@ -215,7 +212,6 @@ export default function Seguimiento() {
                         </p>
                       </div>
                     ) :
-                    compras.map((compra) => (
                     <>
                     <div className="card bg-base-100 shadow-xl transition duration-300 hover:scale-105 hover:shadow-white">
                         <figure>
@@ -320,59 +316,59 @@ export default function Seguimiento() {
                             </div>
                         </div>  
                     </div>
-                        <div className="card bg-base-100 shadow-xl transition duration-300 hover:scale-105 hover:shadow-white">
-                            <figure>
-                                <img
-                                    src={compra.carrito[0].urlimagen }
-                                    alt="Imagen En Camino"
-                                    className="h-80 w-full bg-white object-cover"
-                                />
-                            </figure>
-                            <div className="card-body">
-                                <Link href={`/seguimiento/`+compra.ordenDeCompra}>
-                                    <div className="flex gap-5">
-                                        <h2 className="card-title" >
-                                            ID Compra: {compra.ordenDeCompra}
-                                        </h2>
-                                        <div className="text-13px badge badge-outline">
-                                            <p>{compra.estado}</p>
+                        {compras.map((compra) => (
+                            <div className="card bg-base-100 shadow-xl transition duration-300 hover:scale-105 hover:shadow-white">
+                                <figure>
+                                    <img
+                                        src={compra.carrito[0].urlimagen }
+                                        alt="Imagen En Camino"
+                                        className="h-80 w-full bg-white object-cover"
+                                    />
+                                </figure>
+                                <div className="card-body">
+                                    <Link href={`/seguimiento/`+compra.ordenDeCompra}>
+                                        <div className="flex gap-5">
+                                            <h2 className="card-title" >
+                                                ID Compra: {compra.ordenDeCompra}
+                                            </h2>
+                                            <div className="text-13px badge badge-outline">
+                                                <p>{compra.estado}</p>
+                                            </div>
                                         </div>
-                                    </div>
-                                </Link>
-                                <div>
-                                    <p className="card-status">
-                                        Fecha Compra: {compra.fecha}
-                                    </p>
-                                    <br />
-                                    <p className="card-status">
-                                        Productos: {compra.carrito.map((producto) => (
-                                            <p>{producto.nombre} * {producto.cantidad}</p>
-                                        ))}
-                                    </p>
-                                    <p className="card-status" >
-                                        Total: {compra.total}
-                                    </p>
-                                </div>
-                                <div className="card-actions justify-end pt-3">
-                                    <ul className="steps">
-                                        <li className="step step-success">Compra</li>
-                                        <li className={"step "+ `${compra.estado !== 'pendiente' ? '' : ' step-success'  }` }>Preparación</li>
-                                        <li className="step">En Camino</li>
-                                        <li className="step">Entregado</li>
-                                    </ul>
-                                    <br />
-                                    <Link href={`/seguimiento/123456`}>
-                                        <button className="btn bg-red-600 text-white hover:bg-green-600 hover:text-black">
-                                            Ver detalles de compra
-                                        </button>
                                     </Link>
-                                </div>
-                            </div>  
-                        </div>
+                                    <div>
+                                        <p className="card-status">
+                                            Fecha Compra: {compra.fecha}
+                                        </p>
+                                        <br />
+                                        <p className="card-status">
+                                            Productos: {compra.carrito.map((producto) => (
+                                                <p>{producto.nombre} * {producto.cantidad}</p>
+                                            ))}
+                                        </p>
+                                        <p className="card-status" >
+                                            Total: {compra.total}
+                                        </p>
+                                    </div>
+                                    <div className="card-actions justify-end pt-3">
+                                        <ul className="steps">
+                                            <li className="step step-success">Compra</li>
+                                            <li className={"step "+ `${compra.estado !== 'pendiente' ? '' : ' step-success'  }` }>Preparación</li>
+                                            <li className="step">En Camino</li>
+                                            <li className="step">Entregado</li>
+                                        </ul>
+                                        <br />
+                                        <Link href={`/seguimiento/123456`}>
+                                            <button className="btn bg-red-600 text-white hover:bg-green-600 hover:text-black">
+                                                Ver detalles de compra
+                                            </button>
+                                        </Link>
+                                    </div>
+                                </div>  
+                            </div>
+                        ))}
                     </>
-                    ))
                 }
-
             </div>
         </div >
             <Footer />

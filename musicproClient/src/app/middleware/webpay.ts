@@ -1,5 +1,4 @@
-import { WebpayPlus } from 'transbank-sdk'
-import { Options, IntegrationApiKeys, Environment, IntegrationCommerceCodes } from 'transbank-sdk'
+import { WebpayPlus, Options, IntegrationApiKeys, Environment, IntegrationCommerceCodes  } from 'transbank-sdk'
 
 const tx = new WebpayPlus.Transaction(
     new Options(
@@ -14,12 +13,10 @@ export const pago = async (Amount: number, Url: string, ordenDeCompra: string, s
         const buyOrder: string = ordenDeCompra
         const returnUrl: string = `${Url}`
         const sessionId: string = sessionID
-    
         const createResponse = await tx.create(buyOrder, sessionId, amount, returnUrl)
 
         const url: string = createResponse.url
         const token: string = createResponse.token
-    
         return { url, token }
     } else{
         return { error: 'Faltan datos' }

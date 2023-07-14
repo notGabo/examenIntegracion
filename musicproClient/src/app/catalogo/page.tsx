@@ -246,7 +246,7 @@ export default function Catalogo() {
     console.log("REALIZANDO FILTRAJE.")
     // console.log(`FILTROS: ${filtros}`)
     filtraje(filtros, allProds);
-  })
+  },[filtros])
 
   // load spinner while productos is fetching data
   if (productos.length === 0) {
@@ -267,48 +267,55 @@ export default function Catalogo() {
       <Navmenu />
 
       <div className="m-16 min-h-screen ">
-        <div className="flex h-20 w-full items-center justify-evenly bg-red-800  p-3 rounded-xl">
-          <p>FILTROS:</p>
-          <div className="flex items-center">
-            <label className="mr-5 flex items-center ">
+        <div className="flex  w-full items-center justify-evenly ">
+          <div className="flex gap-5">
+          <label className={`mr-5 flex items-center border rounded-xl py-1 px-2 select-none transition-all ${isChecked1 ? 'bg-white text-gray-500 scale-[1.]' : ''}`}>
               <input
                 type="checkbox"
-                className="form-checkbox"
+                className=""
                 id="Instrumentos de Cuerdas"
                 checked={isChecked1}
                 onChange={handleCheckboxChange}
+                style={{ display: "none" }}
+                value="Instrumentos de Cuerdas"
               />
-              <span className="ml-2">Instrumentos de cuerda</span>
+              <span className="">Instrumentos de cuerda</span>
             </label>
-            <label className="mr-5 flex items-center">
+            <label className={`cursor-pointer mr-5 flex items-center border rounded-xl py-1 px-2 select-none transition-all ${isChecked2 ? 'bg-white text-gray-500 scale-[1.15]' : ''}`}>
               <input
                 type="checkbox"
-                className="form-checkbox"
+                className=""
                 id="Percusión"
                 checked={isChecked2}
                 onChange={handleCheckboxChange}
+                style={{ display: "none" }}
+                value="Percusión"
               />
-              <span className="ml-2">Percusión</span>
+              <span className="">Percusión</span>
             </label>
-            <label className="mr-5 flex items-center">
+            <label className={`cursor-pointer mr-5 flex items-center border rounded-xl py-1 px-2 select-none transition-all ${isChecked3 ? 'bg-white text-gray-500 scale-[1.15]' : ''}`}>
               <input
                 type="checkbox"
-                className="form-checkbox"
+                className=""
                 id="Amplificadores"
                 checked={isChecked3}
                 onChange={handleCheckboxChange}
+                style={{ display: "none" }}
+                value="Amplificadores"
               />
-              <span className="ml-2">Amplificadores</span>
+              <span className="">Amplificadores</span>
             </label>
-            <label className="mr-5 flex items-center">
+            <label className={`cursor-pointer mr-5 flex items-center border rounded-xl py-1 px-2 select-none transition-all ${isChecked4 ? 'bg-white text-gray-500 scale-[1.15]' : ''}`}>
               <input
                 type="checkbox"
-                className="form-checkbox"
+                className=""
                 id="Accesorios varios"
                 checked={isChecked4}
                 onChange={handleCheckboxChange}
+                style={{ display: "none" }}
+                value="Accesorios varios"
               />
-              <span className="ml-2">Accesorios varios</span>
+              <span className="">Accesorios varios</span>
             </label>
           </div>
         </div>

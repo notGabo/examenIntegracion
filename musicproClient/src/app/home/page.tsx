@@ -70,7 +70,7 @@ export default function Home() {
         <div className="container overflow-hidden flex flex-col justify-between relative rounded-3xl">
             <img src="https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Imagen Violín" className=""/>
             <div className="absolute inset-0 bg-black opacity-70"></div>
-            <div className="absolute inset-0 flex flex-col items-center justify-center active:text-red-400 transition-all">
+            <div className="absolute inset-0 flex flex-col items-center justify-center transition-all">
               <div className="container text-center flex content-center flex-col items-center justify-center p-20">
                 <h3 className="text-4xl font-bold">¿Quienes somos?</h3>
                 <br />

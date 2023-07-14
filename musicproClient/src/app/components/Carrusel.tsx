@@ -10,7 +10,7 @@ const Carrusel = () => {
     {
         foto: "https://images.unsplash.com/photo-1568057609581-8556cf900d3c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
         texto:  (
-        <h1 className="font-black text-center lg:text-6xl md:text-2xl sm:text-5xl transition ease-in-out delay-150 hover:-translate-y-1 hover:text-white hover:scale-110 duration-300">
+        <h1 className="cursor-default font-black text-center lg:text-6xl md:text-2xl sm:text-5xl transition ease-in-out delay-150 hover:-translate-y-1 hover:text-white hover:scale-110 duration-300">
             Bienvenido a MusicPro
         </h1>
         )

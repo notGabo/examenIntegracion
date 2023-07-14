@@ -17,7 +17,15 @@ export const pago = async (Amount: number, Url: string, ordenDeCompra: string, s
 
         const url: string = createResponse.url
         const token: string = createResponse.token
-        return { url, token }
+        //si la compra es aceptada
+        if (url && token) {
+            return { url, token }
+        }
+        //si la compra es rechazada
+        else {
+            return { error: 'Compra rechazada' }
+        }
+        
     } else{
         return { error: 'Faltan datos' }
     }

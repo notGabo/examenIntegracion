@@ -276,3 +276,87 @@ def getProductos():
     except Exception as e:
         return HTTPException(status_code=500, detail=f"Error en el servidor: {e}")
     
+# post compra
+class Compra(BaseModel):
+    ordenDeCompra: int
+    carrito: str
+    total: int
+    fecha: str
+    estado: str
+    correo: str
+    username: str
+    nombreCompleto: str
+@app.post('/compra/')
+def postCompra(compra: Compra):
+    ordenDeCompra = compra.ordenDeCompra
+    carrito = compra.carrito
+    total = compra.total
+    fecha = compra.fecha
+    estado = compra.estado
+    correo = compra.correo
+    username = compra.username
+    nombreCompleto = compra.nombreCompleto
+    try:
+        query = f"INSERT INTO Venta (OrdenCompra,carrito,Total,fecha,estado,correo,username,nombreCompleto) VALUES ('{ordenDeCompra}', '{carrito}',{total},'{fecha}', '{estado}', '{correo}', '{username}', '{nombreCompleto}')"
+        db.cursor.execute(query)
+        db.con.commit()
+        queryOrdenDeCompra = f"SELECT OrdenCompra FROM Venta WHERE OrdenCompra = '{ordenDeCompra}'"
+        db.cursor.execute(queryOrdenDeCompra)
+        ordenDeCompra = db.cursor.fetchone()[0]
+        return JSONResponse(
+            content={
+                "mensaje": f"La compra {ordenDeCompra} ha sido generada con exito ",
+                "respuesta": 200,
+            },
+            status_code=200
+        )
+    except Exception as e:
+        print(e)
+        return HTTPException(status_code=500, detail=f"Error en el servidor: {e}")
+
+# get compra por correo
+class CompraCorreo(BaseModel):
+    correo: str
+@app.post('/compra/correo/')
+def getCompraCorreo(compra: CompraCorreo):
+    correo = compra.correo
+    try:
+        query = f"SELECT OrdenCompra,carrito,Total,fecha,estado,correo,username,nombreCompleto FROM Venta WHERE correo = '{correo}'"
+        db.cursor.execute(query)
+        datos = db.cursor.fetchall()
+        datosLista = []
+        for i in range(db.cursor.rowcount):
+            ordenDeCompra = datos[i][0]
+            carrito = datos[i][1].read()
+            total = datos[i][2]
+            fecha = datos[i][3]
+            estado = datos[i][4]
+            correo = datos[i][5]
+            username = datos[i][6]
+            nombreCompleto = datos[i][7]
+            datosLista.append({
+                "ordenDeCompra": ordenDeCompra,
+                "carrito": carrito,
+                "total": total,
+                "fecha": fecha,
+                "estado": estado,
+                "correo": correo,
+                "username": username,
+                "nombreCompleto": nombreCompleto
+            })
+        if db.cursor.rowcount == 0:
+            return {"mensaje": "No hay compras disponibles",
+                    "respuesta": 402
+                    }
+        elif db.cursor.rowcount > 0:
+            return JSONResponse(
+                content={
+                    "mensaje": "Compras obtenidas con exito",
+                    "respuesta": 200,
+                    "compras": datosLista
+                },
+                status_code=200
+            )
+    except Exception as e:
+        return HTTPException(status_code=500, detail=f"Error en el servidor: {e}")
+

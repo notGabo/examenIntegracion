@@ -54,7 +54,7 @@ export default function Home() {
 
         <br /><br />
 
-        <div className="container h-1/5 overflow-hidden flex justify-between bg-black rounded rounded-3xl">
+        <div className="container h-1/5 overflow-hidden flex justify-between bg-black  rounded-3xl">
             <img src="https://images.unsplash.com/photo-1492563817904-5f1dc687974f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80" alt="Imagen Violín" className="w-2/5"/>
             <div className="container text-center flex content-center flex-col items-center justify-center p-20">
               <h3 className="text-4xl font-bold">¡Bienvenidos a nuestra tienda de música e instrumentos!</h3>

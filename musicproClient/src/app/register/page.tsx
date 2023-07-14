@@ -281,7 +281,7 @@ export default function Register() {
           >
           
             {/* Iniciar Sesion */}
-            {`${isSubmitDisabled ? "Iniciar Sesion (verifica los datos ingresados)": "Iniciar Sesion" } `}
+            {`${isSubmitDisabled ? "Registrarme (verifica los datos ingresados)": "Registrarme" } `}
           </button>
             {/* Mostrar el mensaje de envío */}
             {submitMessage}

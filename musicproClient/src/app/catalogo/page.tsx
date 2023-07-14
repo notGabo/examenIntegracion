@@ -269,7 +269,7 @@ export default function Catalogo() {
       <div className="m-16 min-h-screen ">
         <div className="flex  w-full items-center justify-evenly ">
           <div className="flex gap-5">
-          <label className={`mr-5 flex items-center border rounded-xl py-1 px-2 select-none transition-all ${isChecked1 ? 'bg-white text-gray-500 scale-[1.]' : ''}`}>
+          <label className={`mr-5 flex items-center border rounded-xl py-1 px-2 select-none transition-all ${isChecked1 ? 'bg-white text-gray-500 scale-[1.15]' : ''}`}>
               <input
                 type="checkbox"
                 className=""

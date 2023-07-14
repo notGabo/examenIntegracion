@@ -1,47 +1,26 @@
 import { NextRequest } from "next/server";
 import { cookies } from "next/headers";
-import {
-  Environment,
-  Options,
-  WebpayPlus,
-  IntegrationCommerceCodes,
-  IntegrationApiKeys,
-} from "transbank-sdk";
+import { pago } from "@/app/middleware/webpay";
+import jwt from 'jsonwebtoken'
+
+  
+//console.log requested method
 
 export async function POST(request: NextRequest) {
-  const currentUrl = new URL(request.url);
+  console.log(request.method);
+  // console.log request status code
   const { total } = await request.json();
+  const { carrito } = jwt.verify(cookies().get('carrito')?.value as string, "secret") as jwt.JwtPayload;
   const buyOrder = Math.floor(Math.random() * 1000000).toString();
   const sessionId = Math.floor(Math.random() * 1000000).toString();
+  const currentUrl = new URL(request.url);
   const returnUrl = currentUrl.origin + "/pagoRealizado";
-  console.log(total)
-  try {
-    const createResponse = await (new WebpayPlus.Transaction(
-      new Options(
-        IntegrationCommerceCodes.WEBPAY_PLUS,
-        IntegrationApiKeys.WEBPAY,
-        Environment.Integration
-      ))).create(buyOrder, sessionId, total, returnUrl);
-    const cookie = cookies().get('carrito')
-    if (cookie) {
-        cookies().set({
-            name: 'carrito',
-            value: '',
-            path: '/',
-            maxAge: 0,
-        })
-    }        
-    return new Response(JSON.stringify(createResponse), {
-      status: 200,
-      statusText: "respuesta creada",
-      headers: { "Content-Type": "application/json" },
-    });
-    
-  } catch (error) {
-    console.log(error);
-    return new Response(JSON.stringify({ error: error }), {
-      status: 500,
-      statusText: "Error al crear la respuesta",
-    });
-  }
+  const { url, token } = await pago(total, returnUrl, buyOrder, sessionId);
+  console.log(url, token);
+
+  return new Response(JSON.stringify({ url: url, token:token }), {
+    status: 200,
+  });
 }
+
+

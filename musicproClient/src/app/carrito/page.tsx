@@ -4,20 +4,23 @@ import Footer from "../components/Footer";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { CgSpinnerAlt } from "react-icons/cg";
-import { toast, ToastContainer, Flip } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 import Link from "next/link";
-import WebpayPlus from "transbank-sdk/dist/es5/transbank/webpay/webpay_plus";
+import { format } from 'url';
+
 
 export default function Carrito() {
   const router = useRouter();
   const [carrito, setCarrito] = useState([] as any[]);
   const [total, setTotal] = useState(0);
-  const [loading, setLoading] = useState(true);
-  const [tokenTb, setTokenTb] = useState("");
-  const [urlTb, setUrlTb] = useState("");
-
-  const handleSubmit = async (e:any) => { 
+  const [loading, setLoading] = useState(false);
+  const [ loadingCompra, setLoadingCompra] = useState(false);
+  const [ mensajeCompra, setMensajeCompra] = useState(false); 
+  
+  
+  const handleSubmit = async () => { 
+    setLoadingCompra(true);
+    setMensajeCompra(false);
     const response = await fetch("/api/webpay", {
       method: "POST",
       headers: {
@@ -26,15 +29,21 @@ export default function Carrito() {
       credentials: "include",
       body: JSON.stringify({total: total}),
     });
-    const body = await response.json();
-    const token  = body.token;
-    const url = body.url;
-    setTokenTb(token);
-    setUrlTb(url);
-    console.log(token);
-    console.log(url);
-    
-  }  
+    if (response.status === 200) {
+      const body = await response.json();
+      console.log(body.url);
+      console.log(body.token);
+      const url = format({
+        pathname: '/procesandoPago',
+        query: { token: body.token },
+      });
+      router.push(url);
+    }
+    else{
+      setLoadingCompra(false);
+      setMensajeCompra(true);
+    }
+  }
 
   const vaciarCarrrito = async () => {
     try {
@@ -125,7 +134,7 @@ export default function Carrito() {
         <h1 className="pt-5 text-3xl font-bold">Carrito</h1>
       </div>
       <div>
-        <form onSubmit={handleSubmit} action={urlTb} method="POST">
+        
         <div className="flex h-screen flex-col items-center justify-center">
           {carrito.length === 0 ? (
             <div className="mx-5 flex h-screen items-center justify-center gap-1">
@@ -204,10 +213,14 @@ export default function Carrito() {
               </table>
             </div>
           )}
+          <input type="hidden" value={total} />
+          <input type="hidden" name="token_ws"  />
           <div className="flex flex-col items-center justify-center">
             <button
               className="btn-primary btn"
-              disabled={carrito.length === 0 ? true : false}>
+              disabled={carrito.length === 0 ? true : false}
+              type="submit"
+              onClick={handleSubmit}>
               Comprar
             </button>
             {
@@ -219,16 +232,14 @@ export default function Carrito() {
                     Vaciar carrito
                   </div>
               ) : null
-            }
+            }<div className="flex mt-5 items-center justify-center">
+        {loadingCompra ? (<CgSpinnerAlt className="h-10 w-10 animate-spin" />) : null}
+        { mensajeCompra ? ( <div className="bg-red-400 border border-red-700 rounded-lg text-white p-5">Error al procesar pago</div> ) : null }
+         </div>
           </div>
         </div>
-        <input type="hidden" value={total} />
-        <input type="hidden" name="token_ws" value={tokenTb}/>
-        </form>
+
       </div>
-      <ToastContainer 
-         transition={Flip}
-      />
       <Footer />
     </>
     );

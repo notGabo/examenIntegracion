@@ -36,8 +36,6 @@ export default function Catalogo() {
   const [productos, setProductos] = useState([] as Producto[]);
   const [carrito, setCarrito] = useState([] as Carrito[]);
   
-
-  //if the page is reloaded by f5 or by url, the cookie will be overwritten, so we need to do a get request to the server to get the cookie again and set it in the client
   useEffect(() => {
     const checkCookieCarrito = async () => {
       const response = await fetch("/api/carrito", {

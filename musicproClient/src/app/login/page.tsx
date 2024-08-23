@@ -20,13 +20,14 @@ export default function Login() {
       [name]: value,
     }));
   };
-  
+
   const handleSubmit = async (e:any) => {
     e.preventDefault();
-    setSubmitMessage(      
-      <div className="flex flex-col items-center transition duration-300 hover:scale-110 hover:text-orange-500">
-      <CgSpinnerAlt className="animate-spin h-8 w-8 text-neutral-400" />
-      </div>)
+    setSubmitMessage(
+        <div className="flex flex-col items-center transition duration-300 hover:scale-110 hover:text-orange-500">
+          <CgSpinnerAlt className="animate-spin h-8 w-8 text-neutral-400" />
+        </div>
+      )
     const res = await fetch("/api/auth/login", {
       method: "POST",
       headers: {
@@ -34,15 +35,14 @@ export default function Login() {
       },
       body: JSON.stringify(credentials),
       })
-      
-      
+
       if (res.status === 200) {
         setSubmitMessage(<p className="border-2 border-green-950 bg-green-600 text-l font-light text-center rounded-2xl text-neutral-800">redireccionando...</p>)
         setTimeout(() => {
           router.push("/home");
         }, 200);
       }
-      if (res.status == 401) { 
+      if (res.status == 401) {
         setSubmitMessage (<p className="border-2 border-red-950 bg-red-600 text-l font-light text-center rounded-2xl text-neutral-800">Usuario o contraseña incorrectos</p>)
       }
       if (res.status == 500) {
@@ -50,7 +50,6 @@ export default function Login() {
       }
   }
 
-  
     // Verificar si el usuario ya posee una cookie
     useEffect(() => {
       const checkLoggedIn = async () => {
@@ -74,8 +73,7 @@ export default function Login() {
       };
       checkLoggedIn();
     }, []);
-  
-  
+
   return (
     <>
       <div className="mx-auto flex min-h-screen flex-col items-center justify-center px-6 py-8 md:h-screen lg:py-0">

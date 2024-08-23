@@ -25,8 +25,9 @@ export default function Home() {
         console.log("sesion iniciada");
       }
       else{
-        
-        router.push('/login')
+        //router.push('/login')
+        console.warn("sesion no iniciada.");
+        console.warn("Proyecto deprecado! La base de datos se elimino");
       }
     };
     checkLoggedIn();

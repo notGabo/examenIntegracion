@@ -46,7 +46,8 @@ export default function Login() {
         setSubmitMessage (<p className="border-2 border-red-950 bg-red-600 text-l font-light text-center rounded-2xl text-neutral-800">Usuario o contraseña incorrectos</p>)
       }
       if (res.status == 500) {
-        setSubmitMessage (<p className="border-2 border-red-950 bg-red-600 text-l font-light text-center rounded-2xl text-neutral-800">Error interno del servidor. Notifiquelo a @notGabo en github</p>)
+        //setSubmitMessage (<p className="border-2 border-red-950 bg-red-600 text-l font-light text-center rounded-2xl text-neutral-800">Error interno del servidor. Notifiquelo a @notGabo en github</p>)
+        router.push("/home");
       }
   }
 
@@ -150,6 +151,10 @@ export default function Login() {
             </form>
             {submitMessage}
           </div>
+        </div>
+        <div className="w-full rounded-lg border bg-red-500 shadow sm:max-w-md md:mt-10 xl:p-5">
+          <p className="text-white text-center">AVISO</p>
+          <p>Este proyecto ha sido deprecado, la base de datos se ha eliminado por falta de mantencion. Ahora puedes navegar por la pagina sin necesidad de iniciar sesión</p>
         </div>
       </div>
     </>

@@ -33,10 +33,10 @@ export default function Register() {
       confirmPassword: e.target.value,
     });
   };
-  
+
   const handleSubmit = async (e:any) => {
     e.preventDefault();
-    setSubmitMessage(      
+    setSubmitMessage(
       <div className="flex flex-col items-center transition duration-300 hover:scale-110 hover:text-orange-500">
       <CgSpinnerAlt className="animate-spin h-8 w-8 text-neutral-400" />
       </div>)

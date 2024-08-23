@@ -38,16 +38,21 @@ export default function Seguimiento() {
     useEffect(() => {
         const checkLoggedIn = async () => {
             const response = await fetch("/api/sessionChecker", {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                credentials: "include",
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              credentials: "include",
             });
-            if (response.status !== 200) {
-                router.push("/login");
+            if (response.status === 200) {
+              console.log("sesion iniciada");
             }
-        };
+            else{
+              //router.push('/login')
+              console.warn("sesion no iniciada.");
+              console.warn("Proyecto deprecado! La base de datos se elimino");
+            }
+          };
 
         const getCompras = async () => {
             const response = await fetch("/api/webpay", {

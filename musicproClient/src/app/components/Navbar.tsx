@@ -20,14 +20,18 @@ export default function Navmenu() {
         credentials: "include",
       });
 
-      const data = await response.json();
-      const datosCliente = data.data;
+      //const data = await response.json();
+      let datosCliente = {
+        id_rol: 2
+      }
+
       let paginas = [
         {
           nombre: "",
           href: "",
         }
       ];
+      console.log(datosCliente);
       switch (datosCliente.id_rol) {
         case 1:
           paginas = [
@@ -105,10 +109,10 @@ export default function Navmenu() {
           ];
           break;
         default:
-          router.push("/");
+          router.push("/home");
           break;
       }
-      setPaginas(<> 
+      setPaginas(<>
         {paginas.map((pagina) => (
           <li key={pagina.nombre}>
             <Link

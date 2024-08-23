@@ -15,10 +15,9 @@ export default function Carrito() {
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
   const [ loadingCompra, setLoadingCompra] = useState(false);
-  const [ mensajeCompra, setMensajeCompra] = useState(false); 
-  
-  
-  const handleSubmit = async () => { 
+  const [ mensajeCompra, setMensajeCompra] = useState(false);
+
+  const handleSubmit = async () => {
     setLoadingCompra(true);
     setMensajeCompra(false);
     const response = await fetch("/api/webpay", {
@@ -74,8 +73,13 @@ export default function Carrito() {
         },
         credentials: "include",
       });
-      if (response.status !== 200) {
-        router.push("/login");
+      if (response.status === 200) {
+        console.log("sesion iniciada");
+      }
+      else{
+        //router.push('/login')
+        console.warn("sesion no iniciada.");
+        console.warn("Proyecto deprecado! La base de datos se elimino");
       }
     };
 

@@ -41,28 +41,28 @@ export default function Perfil() {
     }
   }
 
-  useEffect(() => {
-    const checkLoggedIn = async () => {
-      setBtnCerrarSesion(<button onClick={cerrarSesion} className="mt-8 rounded-lg bg-rose-600 px-4 py-2 text-white shadow-lg transition duration-300 hover:bg-green-600">Cerrar sesión</button>)
-      const response = await fetch("/api/sessionChecker", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      });
-      const data = await response.json();
+useEffect(() => {
+  const checkLoggedIn = async () => {
+    setBtnCerrarSesion(<button onClick={cerrarSesion} className="mt-8 rounded-lg bg-rose-600 px-4 py-2 text-white shadow-lg transition duration-300 hover:bg-green-600">Cerrar sesión</button>)
+    const response = await fetch("/api/sessionChecker", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
 
-      if (response.status === 200) {
-        console.log("sesion iniciada");
-        setDatosPerfil(data.data);
-      } else {
-        console.log("sesion no iniciada");
-        router.push("/login");
-      }
-    };
-    checkLoggedIn();
-  }, []);
+    if (response.status === 200) {
+      console.log("sesion iniciada");
+    }
+    else{
+      //router.push('/login')
+      console.warn("sesion no iniciada.");
+      console.warn("Proyecto deprecado! La base de datos se elimino");
+    }
+  };
+  checkLoggedIn();
+}, []);
 
     // if datosPerfil attribute is empty, show loading spinner
     if (datosPerfil.username === "") {

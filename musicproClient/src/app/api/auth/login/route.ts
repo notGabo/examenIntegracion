@@ -1,7 +1,7 @@
 import { NextResponse, NextRequest } from 'next/server'
 import jwt from 'jsonwebtoken'
 import { serialize } from 'cookie'
- 
+
 const fastApi = process.env.FAST_API + "/login/";
 
 export async function GET() {
@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
     body: JSON.stringify({ email, password }),
   })
   const data = await res.json()
-  console.log(data);
+
 
   if (res.status === 200) {
     const token = jwt.sign({
@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
       id_rol: data.id_rol,
       rol: data.rol,
     }, 'secret')
-    
+
     const serialized = serialize('myToken', token, {
       httpOnly: false,
       secure: true,
@@ -50,12 +50,13 @@ export async function POST(request: NextRequest) {
       rol: data.rol,
       respuesta: data.respuesta,
     }), {status:200, statusText: 'Inicio de sesion exitoso'})
-    
-    response.headers.append('Set-Cookie', serialized) // Configurar la cookie en la respuesta
+
+    // Configurar la cookie en la respuesta
+    response.headers.append('Set-Cookie', serialized)
     return response
   }
 
-  if (res.status == 401) { 
+  if (res.status == 401) {
     return new Response(JSON.stringify({
         mensaje: data.mensaje,}), {
         status: 401,
@@ -67,10 +68,50 @@ export async function POST(request: NextRequest) {
   }
 
   if (data.respuesta === 500) {
-    return new Response(JSON.stringify({
-      mensaje: data.mensaje,
+    // Deprecado, la base de datos se murio. Se procede a generar un usuario simulado con cualquier credencial.
+    // return new Response(JSON.stringify({
+    //   mensaje: data.mensaje,
+    //   respuesta: data.respuesta,
+    //   error: data.error,
+    // }), {})
+
+    // Generar un usuario simulado con cualquier credencial
+    const data = {
+      nombre: "testName",
+      apellido: "testLastName",
+      correo: "test@email.com",
+      username: "testUsername",
+      password: "testPassword",
+      id_rol: 1,
+      rol: "testRol",
+      respuesta: 200
+    }
+
+    const token = jwt.sign({
+      exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30,
+      email: data.correo,
+      password: password,
+      nombre: data.nombre,
+      apellido: data.apellido,
+      username: data.username,
+      id_rol: data.id_rol,
+      rol: data.rol,
+    }, 'secret')
+
+    const response = new Response(JSON.stringify({
+      mensaje: "Bienvenido {nombre} {apellido}, tu sesion ha sido iniciada con exito",
+      nombre: data.nombre,
+      apellido: data.apellido,
+      email: data.correo,
+      username: data.username,
+      id_rol: data.id_rol,
+      rol: data.rol,
       respuesta: data.respuesta,
-      error: data.error,
-    }), {})
+    }), {status:200, statusText: 'Inicio de sesion exitoso'})
+
+    // Configurar la cookie en la respuesta
+    // response.headers.append('Set-Cookie', serialized)
+    return response
   }
+
 }
